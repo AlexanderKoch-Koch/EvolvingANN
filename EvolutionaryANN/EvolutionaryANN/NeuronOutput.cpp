@@ -11,13 +11,13 @@ NeuronOutput::NeuronOutput(int num_inputs) : Neuron(num_inputs)
 
 }
 
-double NeuronOutput::compute()
+void NeuronOutput::compute()
 {
 	double weighted_sum = sum(inputs);
 	last_inputs = inputs;
 	last_sum = weighted_sum;
 	last_output = weighted_sum;
-	return weighted_sum;
+	output = weighted_sum;
 }
 
 void NeuronOutput::setInput(double new_value, int index)
@@ -47,4 +47,9 @@ double * NeuronOutput::add_input()
 	inputs.push_back(0.0);
 	//return address of this new input
 	return &inputs[inputs.size() - 1];
+}
+
+double NeuronOutput::get_current_output()
+{
+	return output;
 }

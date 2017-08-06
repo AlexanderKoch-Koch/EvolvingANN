@@ -12,7 +12,7 @@ class NeuronHidden : public Neuron {
 public:
 	NeuronHidden(int num_inputs);
 	/*forawrd pass*/
-	double compute(std::vector<double> inputs);
+	void compute();
 	/*updates weights and returns factor for backpropagation*/
 	std::vector<double> learn(double backprop_derivative);
 

@@ -1,12 +1,2 @@
-﻿  NeuronOutput.cpp
-  NeuronHidden.cpp
-c:\users\alexa\git\evolutionaryann\evolutionaryann\evolutionaryann\neuronhidden.cpp(18): warning C4018: '<': signed/unsigned mismatch
-c:\users\alexa\git\evolutionaryann\evolutionaryann\evolutionaryann\neuronhidden.cpp(31): warning C4018: '<': signed/unsigned mismatch
-  NeuralNet.cpp
-c:\users\alexa\git\evolutionaryann\evolutionaryann\evolutionaryann\neuralnet.cpp(44): warning C4018: '<': signed/unsigned mismatch
-  Generating Code...
-  Skipping... (no relevant changes detected)
-  NeuronInput.cpp
-  EvolutionaryANN.cpp
-  EvolutionaryANN.vcxproj -> C:\Users\alexa\git\EvolutionaryANN\EvolutionaryANN\Debug\EvolutionaryANN.exe
-  EvolutionaryANN.vcxproj -> C:\Users\alexa\git\EvolutionaryANN\EvolutionaryANN\Debug\EvolutionaryANN.pdb (Full PDB)
+﻿NeuralNet.obj : error LNK2019: unresolved external symbol "public: void __thiscall NeuronInput::setInput(double)" (?setInput@NeuronInput@@QAEXN@Z) referenced in function "public: class std::vector<double,class std::allocator<double> > __thiscall NeuralNet::compute(class std::vector<double,class std::allocator<double> >)" (?compute@NeuralNet@@QAE?AV?$vector@NV?$allocator@N@std@@@std@@V23@@Z)
+C:\Users\alexa\git\EvolutionaryANN\EvolutionaryANN\Debug\EvolutionaryANN.exe : fatal error LNK1120: 1 unresolved externals

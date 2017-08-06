@@ -7,7 +7,7 @@ NeuronHidden::NeuronHidden(int num_inputs) : Neuron(num_inputs)
 {
 }
 
-double NeuronHidden::compute(std::vector<double> inputs)
+void NeuronHidden::compute()
 {
 	double weighted_sum = sum(inputs);
 	double output = sigmoid(weighted_sum);
@@ -18,7 +18,6 @@ double NeuronHidden::compute(std::vector<double> inputs)
 	for (int i = 0; i < output_connected_inputs.size(); i++) {
 		*output_connected_inputs[i] = output;
 	}
-	return output;
 }
 
 vector<double> NeuronHidden::learn(double backprop_derivative)

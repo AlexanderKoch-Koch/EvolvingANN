@@ -50,16 +50,19 @@ double NeuralNet::train(vector<double> inputs, vector<double> outputs_desired)
 vector<double> NeuralNet::compute(vector<double> inputs)
 {
 
-	/*double l1_0 = neurons_input[0].compute(inputs[0]);
 
-	for (int i = 0; i < neurons_hidden.size(); i++) {
-		neurons_hidden[i].compute();
+	for (int i = 0; i < neurons_input.size(); i++) {
+		neurons_input[i].setInput(inputs[i]);
+		neurons_input[0].compute();
+	}
+	neurons_hidden[0].compute();
+
+	vector<double> outputs;
+	for (int i = 0; i < neurons_output.size(); i++) {
+		neurons_output[i].compute();
+		outputs.push_back(neurons_output[i].get_current_output());
 	}
 
-	*/vector<double> outputs;/*
-	for (int i = 0; i < neurons_output.size(); i++) {
-		outputs.push_back(neurons_output[i].compute());
-	}*/
 
 	return outputs;
 }
