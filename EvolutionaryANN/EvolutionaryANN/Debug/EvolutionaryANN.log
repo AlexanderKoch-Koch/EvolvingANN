@@ -1,16 +1,12 @@
-﻿  NeuralNet.cpp
-c:\users\alexa\documents\visual studio 2015\projects\neuronoutput.h(13): error C2061: syntax error: identifier 'NeuronHidden'
-c:\users\alexa\documents\visual studio 2015\projects\neuronoutput.h(17): error C2065: 'NeuronHidden': undeclared identifier
-c:\users\alexa\documents\visual studio 2015\projects\neuronoutput.h(17): error C2059: syntax error: '>'
-c:\users\alexa\documents\visual studio 2015\projects\neuronoutput.h(17): error C2976: 'std::vector': too few template arguments
-  c:\program files (x86)\microsoft visual studio 14.0\vc\include\vector(679): note: see declaration of 'std::vector'
-c:\users\alexa\documents\visual studio 2015\projects\neuronoutput.h(18): warning C4624: 'NeuronOutput': destructor was implicitly defined as deleted
-c:\users\alexa\documents\visual studio 2015\projects\neuronhidden.h(23): error C2061: syntax error: identifier 'NeuronInput'
-c:\users\alexa\documents\visual studio 2015\projects\neuronhidden.h(32): error C2065: 'NeuronInput': undeclared identifier
-c:\users\alexa\documents\visual studio 2015\projects\neuronhidden.h(32): error C2059: syntax error: '>'
-c:\users\alexa\documents\visual studio 2015\projects\neuronhidden.h(32): error C2976: 'std::vector': too few template arguments
-  c:\program files (x86)\microsoft visual studio 14.0\vc\include\vector(679): note: see declaration of 'std::vector'
-c:\users\alexa\documents\visual studio 2015\projects\neuronhidden.h(33): warning C4624: 'NeuronHidden': destructor was implicitly defined as deleted
-c:\users\alexa\documents\visual studio 2015\projects\neuralnet.cpp(21): error C2660: 'NeuronOutput::create_synapse': function does not take 1 arguments
-c:\users\alexa\documents\visual studio 2015\projects\neuralnet.cpp(27): error C2660: 'NeuronHidden::create_synapse_input': function does not take 1 arguments
-c:\users\alexa\documents\visual studio 2015\projects\neuralnet.cpp(39): warning C4018: '<': signed/unsigned mismatch
+﻿  NeuronOutput.cpp
+  NeuronHidden.cpp
+c:\users\alexa\git\evolutionaryann\evolutionaryann\evolutionaryann\neuronhidden.cpp(18): warning C4018: '<': signed/unsigned mismatch
+c:\users\alexa\git\evolutionaryann\evolutionaryann\evolutionaryann\neuronhidden.cpp(31): warning C4018: '<': signed/unsigned mismatch
+  NeuralNet.cpp
+c:\users\alexa\git\evolutionaryann\evolutionaryann\evolutionaryann\neuralnet.cpp(44): warning C4018: '<': signed/unsigned mismatch
+  Generating Code...
+  Skipping... (no relevant changes detected)
+  NeuronInput.cpp
+  EvolutionaryANN.cpp
+  EvolutionaryANN.vcxproj -> C:\Users\alexa\git\EvolutionaryANN\EvolutionaryANN\Debug\EvolutionaryANN.exe
+  EvolutionaryANN.vcxproj -> C:\Users\alexa\git\EvolutionaryANN\EvolutionaryANN\Debug\EvolutionaryANN.pdb (Full PDB)

@@ -15,8 +15,8 @@ double NeuronHidden::compute(std::vector<double> inputs)
 	last_sum = weighted_sum;
 	last_output = weighted_sum;
 
-	for (int i = 0; i < outputs.size(); i++) {
-		*outputs[i] = output;
+	for (int i = 0; i < output_connected_inputs.size(); i++) {
+		*output_connected_inputs[i] = output;
 	}
 	return output;
 }
@@ -35,36 +35,17 @@ vector<double> NeuronHidden::learn(double backprop_derivative)
 	return backprop_derivatives;
 }
 
-void NeuronHidden::add_output_neuron(NeuronOutput * neuron_output, int index)
-{
-	connected_output_neurons.push_back(neuron_output);
-}
 
 void NeuronHidden::add_output(double * output)
 {
-	outputs.push_back(output);
+	output_connected_inputs.push_back(output);
 }
 
 
-void NeuronHidden::add_hidden_neuron(NeuronHidden * neuron_hidden, int index)
-{
-	connected_hidden_neurons.push_back(neuron_hidden);
-}
-
-double * NeuronHidden::create_synapse(NeuronHidden * input_neuron)
+double * NeuronHidden::add_input()
 {
 	//add new input
 	inputs.push_back(0.0);
-	input_neurons.push_back(input_neuron);
-	//return address of this new input
-	return &inputs[inputs.size() - 1];
-}
-
-double * NeuronHidden::create_synapse_input(NeuronInput* input_neuron)
-{
-	//add new input
-	inputs.push_back(0.0);
-	input_neurons_input.push_back(input_neuron);
 	//return address of this new input
 	return &inputs[inputs.size() - 1];
 }

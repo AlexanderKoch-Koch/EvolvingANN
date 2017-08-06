@@ -41,11 +41,10 @@ vector<double> NeuronOutput::learn(double output_desired)
 	return backprop_derivatives;
 }
 
-double * NeuronOutput::create_synapse(NeuronHidden * input_neuron)
+double * NeuronOutput::add_input()
 {
 	//add new input
 	inputs.push_back(0.0);
-	input_neurons.push_back(input_neuron);
 	//return address of this new input
 	return &inputs[inputs.size() - 1];
 }

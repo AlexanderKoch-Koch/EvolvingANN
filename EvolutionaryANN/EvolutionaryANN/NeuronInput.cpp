@@ -13,8 +13,8 @@ void NeuronInput::setInput(double new_value)
 {
 	double output = compute(new_value);
 
-	for (int i = 0; i < connected_neurons.size(); i++){
-		connected_neurons[i]->setInput(output);
+	for (int i = 0; i < output_connected_inputs.size(); i++){
+		*output_connected_inputs[i] = output;
 	}
 }
 
@@ -23,12 +23,8 @@ double NeuronInput::compute(double input)
 	return input;
 }
 
-void NeuronInput::add_neuron_input(NeuronHidden * neuron_input_variable)
-{
-	connected_neurons.push_back(neuron_input_variable);
-}
 
 void NeuronInput::add_output(double * output)
 {
-	outputs.push_back(output);
+	output_connected_inputs.push_back(output);
 }

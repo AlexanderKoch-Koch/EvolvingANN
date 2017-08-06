@@ -10,9 +10,9 @@ public:
 	double compute();
 	void setInput(double new_value, int index);
 	std::vector<double> learn(double output_desired);
-	double * create_synapse(NeuronHidden * input_neuron);
+	double * add_input();
 
 private:
 	std::vector<double> inputs;
-	std::vector<NeuronHidden *> input_neurons;
+	std::vector<double *> output_connected_inputs;
 };

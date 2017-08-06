@@ -10,21 +10,26 @@ using namespace std;
 
 NeuralNet::NeuralNet(int inputs, int outputs, int neurons_number)
 {	
+	//create output neurons
 	for (int i = 0; i < outputs; i++)
 	{
 		neurons_output.push_back(NeuronOutput(2));
 	}
 
+	//create one hidden neuron
 	neurons_hidden.push_back(NeuronHidden(1));
+	//connect hidden neuron with all output neurons
 	for (int i = 0; i < outputs; i++)
 	{
-		neurons_hidden[0].add_output(neurons_output[i].create_synapse(&neurons_hidden[0]));
+		neurons_hidden[0].add_output(neurons_output[i].add_input());
 		
 	}
+
+	//create input neurons and connect them to the hidden neuron
 	for (int i = 0; i < inputs; i++)
 	{
 		neurons_input.push_back(NeuronInput(1));
-		neurons_input[i].add_output(neurons_hidden[0].create_synapse_input(&neurons_input[i]));
+		neurons_input[i].add_output(neurons_hidden[0].add_input());
 	}
 }
 
