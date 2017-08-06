@@ -145,21 +145,21 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\Documents\Visual Studio 2015\Projects\NeuralNet.h" />
-    <ClInclude Include="..\..\..\..\Documents\Visual Studio 2015\Projects\Neuron.h" />
-    <ClInclude Include="..\..\..\..\Documents\Visual Studio 2015\Projects\NeuronHidden.h" />
-    <ClInclude Include="..\..\..\..\Documents\Visual Studio 2015\Projects\NeuronInput.h" />
-    <ClInclude Include="..\..\..\..\Documents\Visual Studio 2015\Projects\NeuronOutput.h" />
+    <ClInclude Include="NeuralNet.h" />
+    <ClInclude Include="Neuron.h" />
+    <ClInclude Include="NeuronHidden.h" />
+    <ClInclude Include="NeuronInput.h" />
+    <ClInclude Include="NeuronOutput.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\Documents\Visual Studio 2015\Projects\NeuralNet.cpp" />
-    <ClCompile Include="..\..\..\..\Documents\Visual Studio 2015\Projects\Neuron.cpp" />
-    <ClCompile Include="..\..\..\..\Documents\Visual Studio 2015\Projects\NeuronHidden.cpp" />
-    <ClCompile Include="..\..\..\..\Documents\Visual Studio 2015\Projects\NeuronInput.cpp" />
-    <ClCompile Include="..\..\..\..\Documents\Visual Studio 2015\Projects\NeuronOutput.cpp" />
     <ClCompile Include="EvolutionaryANN.cpp" />
+    <ClCompile Include="NeuralNet.cpp" />
+    <ClCompile Include="Neuron.cpp" />
+    <ClCompile Include="NeuronHidden.cpp" />
+    <ClCompile Include="NeuronInput.cpp" />
+    <ClCompile Include="NeuronOutput.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

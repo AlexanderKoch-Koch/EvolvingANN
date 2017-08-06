@@ -24,19 +24,19 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\Documents\Visual Studio 2015\Projects\NeuralNet.h">
+    <ClInclude Include="NeuralNet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\Documents\Visual Studio 2015\Projects\Neuron.h">
+    <ClInclude Include="Neuron.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\Documents\Visual Studio 2015\Projects\NeuronHidden.h">
+    <ClInclude Include="NeuronHidden.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\Documents\Visual Studio 2015\Projects\NeuronInput.h">
+    <ClInclude Include="NeuronInput.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\Documents\Visual Studio 2015\Projects\NeuronOutput.h">
+    <ClInclude Include="NeuronOutput.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -47,19 +47,19 @@
     <ClCompile Include="EvolutionaryANN.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\Documents\Visual Studio 2015\Projects\Neuron.cpp">
+    <ClCompile Include="NeuralNet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\Documents\Visual Studio 2015\Projects\NeuronHidden.cpp">
+    <ClCompile Include="Neuron.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\Documents\Visual Studio 2015\Projects\NeuronInput.cpp">
+    <ClCompile Include="NeuronHidden.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\Documents\Visual Studio 2015\Projects\NeuronOutput.cpp">
+    <ClCompile Include="NeuronInput.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\Documents\Visual Studio 2015\Projects\NeuralNet.cpp">
+    <ClCompile Include="NeuronOutput.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
