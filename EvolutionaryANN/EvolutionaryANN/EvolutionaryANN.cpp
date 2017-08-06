@@ -2,10 +2,26 @@
 //
 
 #include "stdafx.h"
+#include <iostream>
 
+using namespace std;
 
 int main()
 {
-    return 0;
+	//test
+	NeuralNet ann = NeuralNet(1, 1, 2);
+	vector<double> inputs;
+	inputs.push_back(1);
+	//cout << ann.compute(inputs);
+
+	//training
+	vector<double> outputs_desired;
+	outputs_desired.push_back(5.2);
+	for (int i = 0; i < 15000; i++) {
+		cout << ann.train(inputs, outputs_desired) << endl;
+	}
+
+	cin.get();	//keep window open
+	return 0;
 }
 
