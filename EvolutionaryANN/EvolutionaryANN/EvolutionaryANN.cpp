@@ -18,7 +18,7 @@ int main()
 	//training
 	vector<double> outputs_desired;
 	outputs_desired.push_back(5.2);
-	for (int i = 0; i < 15000; i++) {
+	for (int i = 0; i < 1000; i++) {
 		cout << ann.train(inputs, outputs_desired) << endl;
 	}
 
