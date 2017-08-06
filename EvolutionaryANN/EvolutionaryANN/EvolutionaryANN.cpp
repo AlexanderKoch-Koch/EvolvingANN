@@ -3,6 +3,7 @@
 
 #include "stdafx.h"
 #include <iostream>
+#include "NeuralNet.h"
 
 using namespace std;
 
