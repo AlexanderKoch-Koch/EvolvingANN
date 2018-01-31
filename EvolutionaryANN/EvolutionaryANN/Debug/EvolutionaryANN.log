@@ -1,2 +1,0 @@
-﻿NeuralNet.obj : error LNK2019: unresolved external symbol "public: void __thiscall NeuronInput::setInput(double)" (?setInput@NeuronInput@@QAEXN@Z) referenced in function "public: class std::vector<double,class std::allocator<double> > __thiscall NeuralNet::compute(class std::vector<double,class std::allocator<double> >)" (?compute@NeuralNet@@QAE?AV?$vector@NV?$allocator@N@std@@@std@@V23@@Z)
-C:\Users\alexa\git\EvolutionaryANN\EvolutionaryANN\Debug\EvolutionaryANN.exe : fatal error LNK1120: 1 unresolved externals
