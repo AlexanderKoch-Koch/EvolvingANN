@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="ssh://kogli2000@35.198.82.0:22/home/kogli2000/miniconda3/envs/ai/bin/python" name="ssh://kogli2000@35.198.82.0:22/home/kogli2000/miniconda3/envs/ai/bin/python">
+        <fileTransfer host="35.198.82.0" port="22" privateKey="C:\Users\alexa\.ssh\gcpPrivate.ppk" accessType="SFTP" keyPair="true">
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
