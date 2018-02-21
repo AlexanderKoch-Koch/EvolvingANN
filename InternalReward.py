@@ -7,7 +7,7 @@ class InternalReward:
     def __init__(self, observation_size):
         self.observation_size = observation_size
         self.experiences = deque([], 5)
-        self.dnn = MLPRegressor(hidden_layer_sizes=(observation_size, 1), random_state = 1)
+        self.dnn = MLPRegressor(learning_rate_init=0.1, hidden_layer_sizes=(observation_size, 1), random_state = 1)
         self.dnn.fit([[0] * observation_size], [0])
 
     def add_experience(self, observation, reward):

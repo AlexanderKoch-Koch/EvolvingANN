@@ -1,50 +1,37 @@
-from mathai import relu, sigmoid
-import numpy as np
 import gym
-from Neuron import Neuron
-from InternalReward import InternalReward
+from Brain import Brain
 
-episodes = 200
+
+class EvolvingANN:
+
+    def __init__(self, environment):
+        self.env = environment
+        self.brain = Brain(2, 1)
+        self.steps = None
+
+    def start_episode(self):
+        self.steps = 0
+        is_done = False
+        observation = self.env.reset()
+        while not is_done:
+            if observation[2] > 0:
+                output = self.brain.think(10, [1])
+            else:
+                output = self.brain.think(10, [0])
+
+            if output is None:
+                action = 0
+            elif output == 0:
+                action = 1
+
+            observation, reward, is_done, info = env.step(action)
+            self.brain.learn(reward)
+            env.render()
+            self.steps += 1
+        return self.steps
+
 
 env = gym.make('CartPole-v0')
-num_inputs = 4
-env.render()
-
-neuron1 = Neuron()
-for i in range(num_inputs):
-    neuron1.add_input()
-
-internalReward = InternalReward(num_inputs)
-
-for episode in range(episodes):
-    is_done = False
-    observation = env.reset()
-    steps = 0
-    while not is_done:
-        env.render()
-        inputs = []
-        if observation[2] > 0:
-            inputs.append(1)
-            inputs.append(0)
-        else:
-            inputs.append(0)
-            inputs.append(1)
-
-        for i in range(num_inputs):
-            neuron1.set_input(i, observation[i])
-
-        result = neuron1.compute()
-        action = result
-        observation, reward, is_done, info = env.step(action)
-        if is_done:
-            reward = -0.3
-        else:
-            reward = 0.1
-
-        internal_reward = internalReward.get_internal_reward(observation)
-        neuron1.learn(internal_reward)
-        steps += 1
-        internalReward.add_experience(observation, reward)
-
-    print(steps)
-    internalReward.forget()
+evolvingANN = EvolvingANN(env)
+for i in range(100):
+    print(evolvingANN.start_episode())
