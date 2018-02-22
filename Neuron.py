@@ -1,12 +1,12 @@
 import random
-from mathai import sigmoid
+from MathAI import sigmoid
 
 
 class Neuron:
 
-    def __init__(self, name, learning_rate):
+    def __init__(self, params, name="unknown"):
+        self.p = params
         self.name = name
-        self.learning_rate = learning_rate
         self.inputs = []
         self.weights = []
         self.presynaptic_neurons = []
@@ -21,6 +21,7 @@ class Neuron:
         self.synapse_activity.append(0)
 
     def read_inputs(self):
+        """stores otput of presynaptic neurons in own variable"""
         for i in range(len(self.presynaptic_neurons)):
             self.inputs[i] = self.presynaptic_neurons[i].output
 
@@ -49,11 +50,10 @@ class Neuron:
 
     def learn(self, reward):
         """positive reward reinforces behavior; negative reward results in forgetting"""
-        sum_synapse_weights = sum(self.weights)
         for i in range(len(self.inputs)):
-            self.weights[i] += self.learning_rate * self.synapse_activity[i] * reward
+            self.weights[i] += self.p["learning_rate"] * self.synapse_activity[i] * reward
 
-        print(self.weights)
+        # print(self.weights)
 
     def reset(self):
         """reset recent synapse activity"""
