@@ -4,34 +4,44 @@ from mathai import sigmoid
 
 class Neuron:
 
-    def __init__(self):
+    def __init__(self, name, learning_rate):
+        self.name = name
+        self.learning_rate = learning_rate
         self.inputs = []
         self.weights = []
         self.presynaptic_neurons = []
         self.output = 0
-        """ tracks recent activity of synapse"""
-        self.synapse_activity = []
+        self.synapse_activity = []  # tracks recent activity of synapse
 
     def add_input(self, presynaptic_neuron):
         """adds another input with standard input 0 and initializes random weight"""
         self.inputs.append(0)
         self.presynaptic_neurons.append(presynaptic_neuron)
-        self.weights.append(random.randint(0, 100) / 100.0)  # random weight 0-1
-        # self.weights.append((random.randint(0, 200) - 100) / 100.0)  # random weight -1-1
+        self.weights.append(1 / len(self.inputs))  # weight = 1 / len(self.inputs)
         self.synapse_activity.append(0)
 
     def read_inputs(self):
         for i in range(len(self.presynaptic_neurons)):
             self.inputs[i] = self.presynaptic_neurons[i].output
 
-    def compute(self):
-        """computes neuron outputs with current inputs and stores the result in output"""
+    def compute(self, firing_threshold):
+        """computes neuron outputs and stores the result in self.output. Additionally, it returns the output"""
+        firing_threshold *= len(self.inputs)
+        # calculate weighted sum
         weighted_sum = 0
         for i in range(len(self.inputs)):
-            weighted_sum += self.inputs[i] * self.weights[i]
+            if self.inputs[i] == 1:
+                weighted_sum += self.weights[i]
 
-        if weighted_sum > 1:
+        if weighted_sum > firing_threshold:
+            # neuron fires
             self.output = 1
+            # increase synapse activity for all currently active inputs
+            for i in range(len(self.inputs)):
+                # past activities are becoming more irrelevant
+                self.synapse_activity[i] *= 0.97
+                if self.inputs[i] == 1:
+                    self.synapse_activity[i] += 1
         else:
             self.output = 0
 
@@ -39,8 +49,13 @@ class Neuron:
 
     def learn(self, reward):
         """positive reward reinforces behavior; negative reward results in forgetting"""
-        if self.output == 1:
-            for i in range(len(self.inputs)):
-                if self.inputs[i] == 1:
-                    self.weights[i] = sigmoid(self.weights[i] * (1 + reward))
+        sum_synapse_weights = sum(self.weights)
+        for i in range(len(self.inputs)):
+            self.weights[i] += self.learning_rate * self.synapse_activity[i] * reward
+
         print(self.weights)
+
+    def reset(self):
+        """reset recent synapse activity"""
+        for i in range(len(self.inputs)):
+            self.synapse_activity[i] = 0

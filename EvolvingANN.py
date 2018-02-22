@@ -14,6 +14,10 @@ class EvolvingANN:
         is_done = False
         observation = self.env.reset()
         while not is_done:
+            # draw connectome every 10 steps
+            if self.steps % 10 == 0:
+                self.brain.draw_connectome()
+
             if observation[2] > 0:
                 output = self.brain.think(10, [1])
             else:
@@ -25,6 +29,10 @@ class EvolvingANN:
                 action = 1
 
             observation, reward, is_done, info = env.step(action)
+            if is_done:
+                reward = -0.2
+            else:
+                reward = 0.01
             self.brain.learn(reward)
             env.render()
             self.steps += 1
@@ -34,4 +42,4 @@ class EvolvingANN:
 env = gym.make('CartPole-v0')
 evolvingANN = EvolvingANN(env)
 for i in range(100):
-    print(evolvingANN.start_episode())
+    print("score = " + str(evolvingANN.start_episode()))
