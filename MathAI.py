@@ -1,5 +1,6 @@
 import math
 import numpy as np
+import random
 
 
 def sigmoid(x, derivative=False):
@@ -17,4 +18,9 @@ def relu(X, derivative=False):
         np.maximum(X, 0, out=X)
 
     return X
+
+
+def round_randomly(x):
+    """rounds float x randomly to int"""
+    return int(x) + (random.random() < x - int(x))
 
