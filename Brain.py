@@ -5,7 +5,6 @@ import networkx as nx
 import matplotlib.pyplot as plt
 from MathAI import round_randomly
 import time
-import matplotlib.animation
 
 
 class Brain:
@@ -24,7 +23,8 @@ class Brain:
         self.neuron_params = {
             "learning_rate": self.p["learning_rate"],
             "synapse_activity_discount": self.p["synapse_activity_discount"],
-            "initial_firing_threshold": self.p["initial_firing_threshold"]
+            "initial_firing_threshold": self.p["initial_firing_threshold"],
+            "initial_weight": self.p["initial_weight"]
         }
 
         """Input neurons"""
@@ -37,7 +37,6 @@ class Brain:
         self.graph.node[self.neurons[0].name]["pos"] = (1, 0)
         for input_neuron in range(self.p["num_inputs"]):
             self.neurons[0].add_input(self.input_neurons[input_neuron])
-            self.graph.add_edge(self.input_neurons[input_neuron].name, self.neurons[0].name)
 
         """Output neurons"""
         self.output_neuron_index_range = range(1, self.p["num_outputs"] + 1)
@@ -46,7 +45,6 @@ class Brain:
             self.neurons.append(Neuron(self.neuron_params, name, self.graph))
             self.neurons[output_neuron].add_input(self.neurons[0])
             self.graph.node[self.neurons[output_neuron].name]["pos"] = (5, 0)
-            self.graph.add_edge(self.neurons[0].name, self.neurons[output_neuron].name)
 
     def think(self, active_input_indexes):
         # activate inputs
@@ -58,7 +56,6 @@ class Brain:
             neuron.read_inputs()
 
         for _ in range(self.p["think_steps"]):
-            print(str(len(self.neurons)) + "    firing_threshold:" + str(self.firing_threshold))
 
             # compute
             num_neurons_fired = 0
@@ -90,16 +87,16 @@ class Brain:
                 self.graph.node[self.neurons[-1].name]["pos"] = (x, y)
 
             # reconnect
-            for _ in range(round_randomly(self.p["reconnection_rate"])):
-                # choose random neuron
-                neuron = self.neurons[random.randint(0, len(self.neurons) - 1)]
-                # choose a random new presynaptic neuron
-                all_neurons = self.neurons + self.input_neurons
-                new_presynaptic_neuron = all_neurons[random.randint(0, len(all_neurons) - 1)]
-                # add if synapse doesn't yet exist
-                if new_presynaptic_neuron not in neuron.presynaptic_neurons:
-                    neuron.add_input(new_presynaptic_neuron)
-                    self.graph.add_edge(new_presynaptic_neuron.name, neuron.name)
+            for neuron in self.neurons:
+                if sum(neuron.weights) > self.p["target_weight_sum"] + 1:
+                    # remove synapse with smallest weight
+                    neuron.remove_synapse(neuron.weights.index(min(neuron.weights)))
+                elif sum(neuron.weights) < self.p["target_weight_sum"] - 1:
+                    all_neurons = self.neurons + self.input_neurons
+                    new_presynaptic_neuron = all_neurons[random.randint(0, len(all_neurons) - 1)]
+                    # add if synapse doesn't yet exist
+                    if new_presynaptic_neuron not in neuron.presynaptic_neurons:
+                        neuron.add_input(new_presynaptic_neuron)
 
         # return None if no output was active
         return None
@@ -119,7 +116,10 @@ class Brain:
         node_color_dictionary = nx.get_node_attributes(self.graph, 'color')
         node_color_list = [v for v in node_color_dictionary.values()]
 
-        nx.draw(self.graph, pos=pos, node_color=node_color_list, with_labels=True, font_weight='bold')
+        weights = [self.graph[u][v]['weight'] for u, v in self.graph.edges]
+        edge_colors = ["g" if x > 0 else "r" for x in weights]
+
+        nx.draw(self.graph, pos=pos, node_color=node_color_list, width=weights, edge_color=edge_colors, with_labels=True, font_weight='bold')
         plt.pause(0.001)    # pause to let events be processed
 
-        time.sleep(0.4)
+        #time.sleep(0.4)
