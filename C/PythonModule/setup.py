@@ -1,9 +1,12 @@
 from distutils.core import setup, Extension
+import numpy
 
 module1 = Extension('spikingann',
-                    sources = ['Simulation.c', "Brain.c", "Neuron.c"])
+    sources = ['SpikingANN.c', "Brain.c", "Neuron.c"],
+    include_dirs=[numpy.get_include()],
+)
 
 setup (name = 'spikingann',
-       version = '1.0',
-       description = 'This is a demo package',
+       version = '0.1.2',
+       description = 'This is a library for using a spiking artificial neural network',
        ext_modules = [module1])

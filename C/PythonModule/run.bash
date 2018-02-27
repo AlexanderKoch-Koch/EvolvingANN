@@ -1,2 +1,1 @@
-gcc Simulation.c Neuron.c -o Simulation
-Simulation
+python setup.py install

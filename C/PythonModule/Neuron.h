@@ -1,6 +1,7 @@
 #ifndef NEURON_H
 #define NEURON_H
 #include "Parameters.h"
+#include "Synapse.h"
 /**
 Compute if neuron fires
 @param inputs current inputs to the Neuron
@@ -8,27 +9,10 @@ Compute if neuron fires
 @param synapse_activities increase if pre and postsynaptic neurons fire
 @return 1 if fires, otherwise 0
 */
-void compute(
-  int inputs[5][NUM_SYNAPSES_PER_NEURON],
-  float weights[5][NUM_SYNAPSES_PER_NEURON],
-  int neuron_outputs[5]
-);
+void compute(struct Synapse **neurons, int num_neurons, int num_synapses_per_neuron, int *neuron_outputs);
 
-void read(
-  int inputs[5][NUM_SYNAPSES_PER_NEURON],
-  int *p_presynaptic_neuron_outputs[5][NUM_SYNAPSES_PER_NEURON]
-);
+void read(struct Synapse **neurons, int num_neurons, int num_synapses_per_neuron);
 
-void learn(
-  float weights[5][NUM_SYNAPSES_PER_NEURON],
-  float synapse_activities[5][NUM_SYNAPSES_PER_NEURON],
-  float reward
-);
-
-void tag_synapse(
-  float synapse_activities[5][NUM_SYNAPSES_PER_NEURON],
-  int neuron_outputs[5],
-  int neuron_inputs[5][NUM_SYNAPSES_PER_NEURON]
-);
+void learn(struct Synapse **neurons, int num_neurons, int num_synapses_per_neuron, float reward);
 
 #endif

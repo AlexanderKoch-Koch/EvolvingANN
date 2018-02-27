@@ -1,56 +1,48 @@
 #include <stdio.h>
 #include "Neuron.h"
 #include "Parameters.h"
+#include "Synapse.h"
 
 
-
-void compute(int inputs[NUM_NEURONS][NUM_SYNAPSES_PER_NEURON],
-             float weights[NUM_NEURONS][NUM_SYNAPSES_PER_NEURON],
-             int neuron_outputs[NUM_NEURONS]){
+void compute(struct Synapse **neurons, int num_neurons, int num_synapses_per_neuron, int *neuron_outputs){
   int weighted_sum = 0;
-  for(int neuron = 0; neuron < NUM_NEURONS; neuron++){
+  for(int neuron = 0; neuron < num_neurons; neuron++){
     weighted_sum = 0;
-    for(int input = 0; input < NUM_SYNAPSES_PER_NEURON; input++){
-      if(inputs[neuron][input] == 1){
-        weighted_sum += weights[neuron][input];
+    for(int synapse = 0; synapse < num_synapses_per_neuron; synapse++){
+      neurons[neuron][synapse].activity *= SYNAPSE_DISCOUNT_FACTOR;
+      printf("input %d ", neurons[neuron][synapse].input);
+      if(neurons[neuron][synapse].input == 1){
+        weighted_sum += neurons[neuron][synapse].weight;
       }
     }
     if(weighted_sum > THRESHOLD){
        neuron_outputs[neuron] = 1;
-       printf("fire\n");
+      printf("fire\n");
+       for(int synapse = 0; synapse < num_synapses_per_neuron; synapse++){
+         neurons[neuron][synapse].activity += neurons[neuron][synapse].input;
+       }
     }
-    else neuron_outputs[neuron] = 0;
-  }
-}
-
-
-void read(int inputs[NUM_NEURONS][NUM_SYNAPSES_PER_NEURON], int *p_presynaptic_neuron_outputs[NUM_NEURONS][NUM_SYNAPSES_PER_NEURON]){
-  for(int neuron = 0; neuron < NUM_NEURONS; neuron++){
-    for(int synapse = 0; synapse < NUM_SYNAPSES_PER_NEURON; synapse++){
-      inputs[neuron][synapse] = *p_presynaptic_neuron_outputs[neuron][synapse];
+    else{
+      printf("not fire\n");
+       neuron_outputs[neuron] = 0;
     }
   }
 }
 
 
-void learn(float weights[NUM_NEURONS][NUM_SYNAPSES_PER_NEURON],
-           float synapse_activities[NUM_NEURONS][NUM_SYNAPSES_PER_NEURON],
-           float reward){
-  for(int neuron = 0; neuron < NUM_NEURONS; neuron++){
-    for(int synapse = 0; synapse < NUM_SYNAPSES_PER_NEURON; synapse++){
-      weights[neuron][synapse] += LEARNING_RATE * synapse_activities[neuron][synapse] * reward;
+void read(struct Synapse **neurons, int num_neurons, int num_synapses_per_neuron){
+  for(int neuron = 0; neuron < num_neurons; neuron++){
+    for(int synapse = 0; synapse < num_synapses_per_neuron; synapse++){
+      neurons[neuron][synapse].input = *neurons[neuron][synapse].p_presynaptic_output;
     }
   }
 }
 
 
-void tag_synapse(float synapse_activities[NUM_NEURONS][NUM_SYNAPSES_PER_NEURON],
-  int neuron_outputs[NUM_NEURONS],
-  int neuron_inputs[NUM_NEURONS][NUM_SYNAPSES_PER_NEURON]){
-    for(int neuron = 0; neuron < NUM_NEURONS; neuron++){
-      for(int synapse = 0; synapse < NUM_SYNAPSES_PER_NEURON; synapse++){
-        synapse_activities[neuron][synapse] *= SYNAPSE_DISCOUNT_FACTOR;
-        synapse_activities[neuron][synapse] += neuron_inputs[neuron][synapse] * neuron_outputs[neuron];
-      }
+void learn(struct Synapse **neurons, int num_neurons, int num_synapses_per_neuron, float reward){
+  for(int neuron = 0; neuron < num_neurons; neuron++){
+    for(int synapse = 0; synapse < num_synapses_per_neuron; synapse++){
+      neurons[neuron][synapse].weight += LEARNING_RATE * neurons[neuron][synapse].activity * reward;
     }
+  }
 }
