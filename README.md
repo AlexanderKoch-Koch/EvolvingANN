@@ -1,6 +1,6 @@
 # Spiking Artificial Neural Network
 
-An attempt to build a self optimizing spiking artificial neural network with reward driven hebbian learning. Currently, it is tested in OpenAis cartPole environment. The network is implemented in C code which is compiled as a python package. This makes it easier to train the agent. The python file Simulation.py, for instance, uses the C extension to master OpenAIs CartPole-v0 environment. In the beginning, the ANN was programmed in Python for testing. Due to performance issues, However, it was reprogrammed in C. The Python prototype code is now inside Python/PythonPrototype directory.
+An attempt to build a self optimizing spiking artificial neural network with reward driven hebbian learning. Currently, it is tested in OpenAI's cartPole environment. The network is implemented in C code which is compiled as a python package. This makes it easier to train the agent. The python file Simulation.py, for instance, uses the C extension to master OpenAIs CartPole-v0 environment. In the beginning, the ANN was programmed in Python for testing. Due to performance issues, However, it was reprogrammed in C. The Python prototype code is now inside Python/PythonPrototype directory.
 
 # The C extension
 C/SpikingANN.c contains the Python interface. All the functions directly accessible from Python are define here. The first function call should always be init(). This calls the init() function in Brain.c which initializes all variables for the ANN.
@@ -11,4 +11,4 @@ In order to maximize reward, Brain.c contains a function called process_reward()
 Python/Simulation.py currently provides an interface to the CartPole environment for the C extension.
 
 # Future plans
-This ANN of course has to run on a GPU to achieve some reasonable performance. NVIDIAs CUDA platform would be suitable. However this AI approach should first be tested on a smaller scale.
+This ANN of course has to run on a GPU to achieve some reasonable performance. NVIDIA's CUDA platform would be suitable. However this AI approach should first be tested on a smaller scale.
