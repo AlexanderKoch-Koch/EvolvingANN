@@ -1,11 +1,13 @@
 # Spiking Artificial Neural Network
 
-An attempt to build a self optimizing spiking artificial neural network with reward driven hebbian learning. Currently, it is tested in OpenAI's cartPole environment. The network is implemented in C code which is compiled as a python package. This makes it easier to train the agent. The python file Simulation.py, for instance, uses the C extension to master OpenAIs CartPole-v0 environment. In the beginning, the ANN was programmed in Python for testing. Due to performance issues, However, it was reprogrammed in C. The Python prototype code is now inside Python/PythonPrototype directory.
+An attempt to build a self optimizing spiking artificial neural network with reward driven hebbian learning. Currently, it is tested in OpenAI's cartPole environment. The network is implemented in a Python C extension. This makes it easier to train the agent in simulated environments. The Python file Simulation.py, for instance, uses the C extension to master OpenAIs CartPole-v0 environment. In the beginning, the ANN was programmed in Python for testing.
+
+In the beginning, the ANN was completely programmed in Python. This code is now inside Python/PythonPrototype directory.
 
 # Example
 ![alt text](https://github.com/AlexanderKoch-Koch/EvolvingANN/blob/master/Example_Connectome.png "example connectome")
 
-This is the connectome after playing 10 episodes of CartPole-v0. The circles represent the neurons. If they are green, they are currently firing. Input neurons only represent the input value. They do not compute. All the others are normal neurons. The output of the output neuron is used as an action which is fed into the environment. Otherwise, they are inactive. The thickness of the lines represents the absolute value of the related weight. Green means positive and red is negative.
+This is the connectome after playing 10 episodes of CartPole-v0. The circles represent the neurons. If they are green, they are currently firing. Input neurons only represent the input value. Their output is just the brain input. All the others are normal neurons. The output of the output neuron is used as an action which is fed into the environment. Otherwise, they are inactive. The thickness of the lines represents the absolute value of the related weight. Green means positive and red is negative.
 
 # The C extension
 C/SpikingANN.c contains the Python interface. All the functions directly accessible from Python are define here. The first function call should always be init(). This calls the init() function in Brain.c which initializes all variables for the ANN.
