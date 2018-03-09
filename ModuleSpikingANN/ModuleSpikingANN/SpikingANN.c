@@ -34,7 +34,7 @@ static PyObject *spikingann_reward(PyObject *self, PyObject *args)
 static PyObject *spikingann_think(PyObject *self, PyObject *args)
 {
   PyObject *obj;
-  float *brain_input;
+  int *brain_input;
 
   if (!PyArg_ParseTuple(args, "O", &obj)) {
     printf("argument has to be exactly one list");
@@ -48,20 +48,20 @@ static PyObject *spikingann_think(PyObject *self, PyObject *args)
   }
 
   int len = Py_SAFE_DOWNCAST(PyObject_Size(obj), Py_ssize_t, int);
-  brain_input = (float*) malloc(sizeof(float) * len);
+  brain_input = (int*) malloc(sizeof(int) * len);
   for(int element = 0; element < len; element++){
     PyObject *next = PyIter_Next(iter);
-    brain_input[element] = PyFloat_AsDouble(next);
+    brain_input[element] = PyObject_IsTrue(next);
   }
 
   int output_length;
-  float *outputs = think(brain_input, len, &output_length);
+  int *outputs = think(brain_input, len, &output_length);
   printf("output_length %d\n", output_length);
   free(brain_input);
 
   PyObject *output_list = PyList_New(output_length);
   for (int i = 0; i < output_length; i++) {
-    PyList_SET_ITEM(output_list, i, PyFloat_FromDouble((double)outputs[i]));
+    PyList_SET_ITEM(output_list, i, PyLong_FromLong((long)outputs[i]));
   }
 
   return output_list;

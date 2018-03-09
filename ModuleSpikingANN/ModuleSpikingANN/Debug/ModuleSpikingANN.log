@@ -1,0 +1,6 @@
+﻿  stdafx.cpp
+  Brain.c
+c:\users\alexa\git\evolvingann\modulespikingann\modulespikingann\brain.c(134): fatal error C1010: unexpected end of file while looking for precompiled header. Did you forget to add '#include "stdafx.h"' to your source?
+  SpikingANN.c
+c:\users\alexa\git\evolvingann\c\pythonmodule\spikingann.c(104): fatal error C1010: unexpected end of file while looking for precompiled header. Did you forget to add '#include "stdafx.h"' to your source?
+  Generating Code...
