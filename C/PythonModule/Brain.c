@@ -26,13 +26,13 @@ void init_brain(int num_neurons_p, int num_inputs_p, int num_outputs_p){
   num_neurons = num_neurons_p + num_outputs_p;
   num_inputs = num_inputs_p;
   output_index_max = num_outputs_p - 1; //output neurons get indexes 0 to num_outputs - 1
-  num_synapses_per_neuron = num_inputs_p;
+  num_synapses_per_neuron = num_inputs_p + num_neurons;
 
   //allocate memory for ANN values
   brain_inputs = (float*) calloc(num_inputs, sizeof(float));
   neuron_outputs = (float*) calloc(num_neurons, sizeof(float));
 
-   /* Intializes random number generator */
+  /* Intializes random number generator */
   time_t t;   
   srand((unsigned) time(&t));
 
@@ -71,13 +71,12 @@ int * think(float *inputs, int len_inputs, int *num_outputs){
   //reset brain_inputs to 0
   memset(brain_inputs, 0, num_inputs * sizeof(float));
   compute(neurons, num_neurons, num_synapses_per_neuron, neuron_outputs);
-  printf("neuron_outputs 0: %d", neuron_outputs[0]);
   float *brain_outputs = (float*) malloc(sizeof(float) * (*num_outputs));
   memcpy(brain_outputs, neuron_outputs, *num_outputs * sizeof(float));
 
   #ifdef DEBUG
   printf("num neurons: %d ", num_neurons);
-  printf("neuron_outputs max: %f", neuron_outputs[0]);
+  printf("neuron_outputs[0]: %f", neuron_outputs[0]);
   printf("\n");
   #endif
 
@@ -95,10 +94,10 @@ void process_reward(float reward){
   for(int neuron = 0; neuron < num_neurons; neuron++){
     for(int synapse = 0; synapse < num_synapses_per_neuron; synapse++){
       //printf("weight %f", fabsf(neurons[neuron][synapse].weight));
-      if(fabsf(neurons[neuron][synapse].weight) < (0.05 * THRESHOLD)){
+      if(fabsf(neurons[neuron][synapse].weight) < 0.1){
         printf("reconnecting neuron %d synapse %d\n", neuron, synapse);
         //reconnect randomly
-        neurons[neuron][synapse].weight = rand_range(-0.4, 1);
+        neurons[neuron][synapse].weight = rand_range(-0.5, 0.6);
         int new_presynaptic_neuron = rand() % (num_neurons + num_inputs);
         if(new_presynaptic_neuron >= num_neurons){
           //connect to input new_presynaptic_neuron - num_neurons

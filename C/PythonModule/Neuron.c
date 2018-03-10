@@ -19,20 +19,16 @@ void compute(struct Synapse **neurons, int num_neurons, int num_synapses_per_neu
       weighted_sum += neurons[neuron][synapse].weight * neurons[neuron][synapse].input;
       
     }
+    printf("weighted_sum: %.2f\n", weighted_sum);
     if(weighted_sum > 0){
-      for(int synapse = 0; synapse < num_synapses_per_neuron; synapse++){
-        int weight_sign = neurons[neuron][synapse].weight / neurons[neuron][synapse].weight;
-        //DEBUG_PRINT(("weight: %f sign %d ", neurons[neuron][synapse].weight, weight_sign));
-        //Updating synapse activity
-        neurons[neuron][synapse].activity += neurons[neuron][synapse].input * weight_sign;
-      }
-      printf("weightsum: %.2f  ", weighted_sum);
       neuron_outputs[neuron] = weighted_sum;
-      printf("neuron_outputs: %.2f  ", neuron_outputs[neuron]);
     }else{
       neuron_outputs[neuron] = 0;
     }
-    printf("neuron output: %.2f\t", neuron_outputs[neuron]);
+    
+    for(int synapse = 0; synapse < num_synapses_per_neuron; synapse++){
+      neurons[neuron][synapse].activity += 100 * neurons[neuron][synapse].input *neurons[neuron][synapse].weight *  weighted_sum;
+    }
   }
 }
 
