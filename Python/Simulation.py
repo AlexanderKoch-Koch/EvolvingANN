@@ -3,27 +3,11 @@ import gym
 import time
 
 
-def observation_to_binary(observation):
-    activated_inputs = []
-    if observation[2] > 0:
-        activated_inputs.append(1)
-        activated_inputs.append(0)
-        if observation[2] > 0.5:
-            activated_inputs.append(1)
-            activated_inputs.append(0)
-    else:
-        activated_inputs.append(0)
-        activated_inputs.append(1)
-        if observation[2] < -0.5:
-            activated_inputs.append(0)
-            activated_inputs.append(1)
-
-    return activated_inputs
 
 
 env = gym.make('CartPole-v0')
 num_inputs = len(env.reset())
-spikingann.init(2, num_inputs, 1)
+spikingann.init(0, 1, 1)
 
 for i in range(1000):
     steps = 0
@@ -31,11 +15,11 @@ for i in range(1000):
     observation = env.reset()
     while not is_done:
         start = time.clock()
-        output = spikingann.think(observation)
+        output = spikingann.think([observation[2]])
         elapsed = time.clock()
         elapsed = elapsed - start
         #print(str(elapsed) + "s")
-        #print(output)
+        print("output: " + str(output))
         if output[0] > 0:
             action = 1
         else:
