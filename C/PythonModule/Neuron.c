@@ -17,14 +17,14 @@ void compute(struct Synapse **neurons, int num_neurons, int num_synapses_per_neu
     }
     if(weighted_sum > THRESHOLD){
        neuron_outputs[neuron] = 1;
-      printf("fire\n");
-       for(int synapse = 0; synapse < num_synapses_per_neuron; synapse++){
-         neurons[neuron][synapse].activity += neurons[neuron][synapse].input;
-       }
     }
     else{
       printf("not fire\n");
        neuron_outputs[neuron] = 0;
+    }
+
+    for(int synapse = 0; synapse < num_synapses_per_neuron; synapse++){
+      neurons[neuron][synapse].activity += neurons[neuron][synapse].input * neurons[neuron][synapse].weight *  neuron_outputs[neuron];
     }
   }
 }
