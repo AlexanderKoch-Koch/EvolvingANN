@@ -5,8 +5,8 @@
 struct Synapse{
   float weight;
   float activity;
-  int input;
-  int *p_presynaptic_output;
+  float input;
+  float *p_presynaptic_output;
 };
 
 

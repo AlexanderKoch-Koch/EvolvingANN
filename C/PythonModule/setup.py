@@ -7,6 +7,6 @@ module1 = Extension('spikingann',
 )
 
 setup (name = 'spikingann',
-       version = '0.1.2',
+       version = '0.2.2',
        description = 'This is a library for using a spiking artificial neural network',
        ext_modules = [module1])

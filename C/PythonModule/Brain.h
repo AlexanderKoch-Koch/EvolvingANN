@@ -15,7 +15,7 @@ do one think step- read inputs, compute, return outputs
 @param len_inputs length of @param inputs array
 @param num_outputs this variable will be set to the number of outputs returned
 */
-int * think(int *inputs, int len_inputs, int *num_outputs);
+int * think(float *inputs, int len_inputs, int *num_outputs);
 
 /**
 adjust the neuron weights

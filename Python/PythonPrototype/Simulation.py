@@ -5,7 +5,7 @@ params = {
     "num_inputs": 4,                    # number of inputs to the brain
     "num_outputs": 1,                   # number of outputs from the brain
     "TFR": 10,                          # I don't know :)
-    "regeneration_rate": 0,             # probability of adding new neurons per thinking step
+    "regeneration_rate": 0.002,             # probability of adding new neurons per thinking step
     "reconnection_rate": 0.3,             # probability of adding new synapse to neurons
     "learning_rate": 0.03,              # factor for weight change
     "initial_firing_threshold": 1,    # start value for neuron fire threshold
@@ -14,7 +14,7 @@ params = {
     "target_firing_ratio": 0.4,         # brain will optimize the neuron firing threshold to achieve this ratio
     "synapse_activity_discount": 0.9,   # discount of synapse tag per thinking step
     "initial_weight": 1.1,
-    "target_weight_sum": 2
+    "target_weight_sum": 3
 }
 
 env = gym.make('CartPole-v0')
