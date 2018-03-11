@@ -55,8 +55,8 @@ static PyObject *spikingann_think(PyObject *self, PyObject *args)
   }
 
   int output_length;
-  float *outputs = think(brain_input, len, &output_length);
-  printf("output_length %d\n", output_length);
+  int *outputs = think(brain_input, len, &output_length);
+  //printf("output_length %d\n", output_length);
   free(brain_input);
 
   PyObject *output_list = PyList_New(output_length);
