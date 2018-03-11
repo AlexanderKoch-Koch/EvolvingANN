@@ -11,7 +11,7 @@
 #define Parameters_H
 
 
- struct Parameters{
+const struct Parameters{
   int num_inputs;
   int num_neurons;
   int num_outputs;
