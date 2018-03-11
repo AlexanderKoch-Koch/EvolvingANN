@@ -27,7 +27,7 @@ void compute(struct Synapse **synapses, int *neuron_outputs, struct Parameters *
       //printf("weight: %.2f, input: %d, neuron_outputs: %d, activity: %.2f\t", synapses[neuron][synapse].weight, synapses[neuron][synapse].input, neuron_outputs[neuron], neurons[neuron][synapse].activity);
     }
   }
-  printf("\navr_output: %.2f", sum_outputs/p->num_neurons);
+  DEBUG_PRINT(("\navr_output: %.2f", sum_outputs/p->num_neurons));
 }
 
 
@@ -57,10 +57,10 @@ void learn(struct Synapse **synapses, float reward, struct Parameters *p){
       float weight_change = p->learning_rate * activity * reward * fabs(p->max_weight_value - fabs(weight));
       //float weight_change = LEARNING_RATE * activity * reward;
       synapses[neuron][synapse].weight += weight_change;
-      printf("activity: %.2f weight_change%.4f new_weight:%.2f  \t", activity, weight_change, synapses[neuron][synapse].weight);
+      DEBUG_PRINT(("activity: %.2f weight_change%.4f new_weight:%.2f  \t", activity, weight_change, synapses[neuron][synapse].weight));
     }
   }
   int num_synapses = p->num_neurons * p->num_synapses_per_neuron;
-  printf("\navr_activity: %.2f, avr_weight: %.2f", sum_activities/num_synapses, sum_weights/num_synapses);
+  DEBUG_PRINT(("\navr_activity: %.2f, avr_weight: %.2f", sum_activities/num_synapses, sum_weights/num_synapses));
 }
 

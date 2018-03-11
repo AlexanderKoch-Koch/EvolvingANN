@@ -26,10 +26,6 @@ void init_brain(struct Parameters parameters){
   neuron_outputs = (int*) calloc(p.num_neurons, sizeof(int));
   synapses = (struct Synapse**) malloc(sizeof(struct Synapse) * p.num_neurons);
 
-  /* Intializes random number generator */
-  //time_t t;   
-  //srand((unsigned) time(&t));
-
   for(int neuron = 0; neuron < p.num_neurons; neuron++){
     //allocate memory for synapse array of each neuron and set all values to 0
     synapses[neuron] = (struct Synapse*) calloc(p.num_synapses_per_neuron, sizeof(struct Synapse));
@@ -52,9 +48,9 @@ int * think(float *inputs, int len_inputs, int *num_outputs){
     printf("list length is wrong");
     return NULL;
   }
-  printf("inputs: ");
+  DEBUG_PRINT(("inputs: "));
   for(int input = 0; input < len_inputs; input++){
-    printf("%.2f, ", inputs[input]);
+    DEBUG_PRINT(("%.2f, ", inputs[input]));
   }
   *num_outputs = p.num_outputs;
   //copy inputs to brain inputs
