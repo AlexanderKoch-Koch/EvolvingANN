@@ -2,6 +2,7 @@ import spikingann
 import gym
 import time
 import collections
+from Preprocessing import preprocess_inputs
 
 
 class Agent:
@@ -11,7 +12,7 @@ class Agent:
 
     def run(self, queue):
         env = gym.make('CartPole-v0')
-        num_inputs = len(self.preprocess_inputs(env.reset()))
+        num_inputs = len(preprocess_inputs(env.reset()))
         brain_parameters = {
             "num_neurons": self.params[0],
             "num_outputs": 1,
@@ -34,12 +35,7 @@ class Agent:
             is_done = False
             observation = env.reset()
             while not is_done:
-                start = time.clock()
-                output = spikingann.think(self.preprocess_inputs(observation))
-                elapsed = time.clock()
-                elapsed = elapsed - start
-                # print(str(elapsed) + "s")
-                #print("output: " + str(output))
+                output = spikingann.think(preprocess_inputs(observation))
                 if output[0] > 0:
                     action = 1
                 else:
@@ -51,35 +47,10 @@ class Agent:
                 else:
                     reward = 0.005
 
-                #env.render()
                 spikingann.reward(reward)
-                # time.sleep(0.01)
                 steps += 1
 
             spikingann.reset_memory()
             scores_deque.append(steps)
 
         queue.put(sum(scores_deque)/len(scores_deque))
-
-    def float_to_binary_list(self, float_value, precision, len_list):
-        result_list = []
-        for i in range(int(len_list/2)):
-            if float_value < -i * precision:
-                result_list.append(1)
-            else:
-                result_list.append(0)
-
-            if float_value > i * precision:
-                result_list.append(1)
-            else:
-                result_list.append(0)
-        return result_list
-
-    def preprocess_inputs(self, observation):
-        inputs = []
-        inputs += self.float_to_binary_list(observation[0], 0.05, 4)
-        inputs += self.float_to_binary_list(observation[1], 0.05, 4)
-        inputs += self.float_to_binary_list(observation[2], 0.05, 8)
-        inputs += self.float_to_binary_list(observation[3], 0.05, 4)
-        return inputs
-
