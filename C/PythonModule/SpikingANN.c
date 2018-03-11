@@ -1,21 +1,32 @@
 #include <Python.h>
 #include "Brain.h"
 #include "Parameters.h"
-#include <numpy/arrayobject.h>
 
 
 
 static PyObject *spikingann_init(PyObject *self, PyObject *args)
 {
-    int num_neurons, num_inputs, num_outputs;
+  PyObject *parameter_dict;
 
-    if (!PyArg_ParseTuple(args, "iii", &num_neurons, &num_inputs, &num_outputs))
+    if (!PyArg_ParseTuple(args, "O!", &PyDict_Type, &parameter_dict))
     {
-      printf("This function takes 3 integer arguments (num_neurons, num_inputs, num_outputs)");
+      printf("This function takes a parameter dictionary");
       return NULL;
     }
-    init_brain(num_neurons, num_inputs, num_outputs);
-    Py_RETURN_NONE;
+  struct Parameters parameters;
+  parameters.num_inputs = 5;
+  parameters.num_inputs = PyLong_AsLong(PyDict_GetItem(parameter_dict,Py_BuildValue("s", "num_inputs")));
+  parameters.num_neurons = PyLong_AsLong(PyDict_GetItem(parameter_dict,Py_BuildValue("s", "num_neurons")));
+  parameters.num_outputs = PyLong_AsLong(PyDict_GetItem(parameter_dict,Py_BuildValue("s", "num_outputs")));
+  parameters.num_synapses_per_neuron = PyLong_AsLong(PyDict_GetItem(parameter_dict,Py_BuildValue("s", "num_synapses_per_neuron")));
+  parameters.learning_rate = PyFloat_AsDouble(PyDict_GetItem(parameter_dict,Py_BuildValue("s", "learning_rate")));
+  parameters.threshold = PyFloat_AsDouble(PyDict_GetItem(parameter_dict,Py_BuildValue("s", "threshold")));
+  parameters.activity_discount_factor = PyFloat_AsDouble(PyDict_GetItem(parameter_dict,Py_BuildValue("s", "activity_discount_factor")));
+  parameters.max_weight_value = PyFloat_AsDouble(PyDict_GetItem(parameter_dict,Py_BuildValue("s", "max_weight_value")));
+  parameters.max_start_weight_sum = PyFloat_AsDouble(PyDict_GetItem(parameter_dict,Py_BuildValue("s", "max_start_weight_sum")));
+  parameters.min_weight = PyFloat_AsDouble(PyDict_GetItem(parameter_dict,Py_BuildValue("s", "min_weight")));
+  init_brain(parameters);
+  Py_RETURN_NONE;
 }
 
 static PyObject *spikingann_reward(PyObject *self, PyObject *args)

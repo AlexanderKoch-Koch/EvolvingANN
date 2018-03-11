@@ -7,11 +7,11 @@ initialize varibles for num_neurons
 @param num_inputs number of binary inputs to the brain
 @param num_outputs number of binary ouytptuts from te brain
 */
-void init_brain(int num_neurons, int num_inputs, int num_outputs);
+void init_brain(struct Parameters parameters);
 
 /**
 do one think step- read inputs, compute, return outputs
-@paraminputs new binary inputs for brain
+@param inputs new binary inputs for brain
 @param len_inputs length of @param inputs array
 @param num_outputs this variable will be set to the number of outputs returned
 */

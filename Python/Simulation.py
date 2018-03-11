@@ -29,7 +29,21 @@ def preprocess_inputs(observation):
 
 env = gym.make('CartPole-v0')
 num_inputs = len(preprocess_inputs(env.reset()))
-spikingann.init(4, num_inputs, 1)
+print(type(num_inputs))
+parameters = {
+    "num_inputs": num_inputs,
+    "num_neurons": 5,
+    "num_outputs": 1,
+    "num_synapses_per_neuron": 13,
+    "learning_rate": 0.5,
+    "threshold": 0,
+    "activity_discount_factor": 0.9,
+    "max_weight_value": 0.5,
+    "max_start_weight_sum": 2,
+    "min_weight": 0.01
+}
+print(parameters)
+spikingann.init(parameters)
 
 for i in range(1000):
     steps = 0

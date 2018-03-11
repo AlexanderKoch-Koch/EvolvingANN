@@ -1,7 +1,3 @@
-#define LEARNING_RATE 0.5
-#define THRESHOLD 0
-#define NUM_SYNAPSES_PER_NEURON 7
-#define SYNAPSE_DISCOUNT_FACTOR 0.8
 #define DEBUG
 
 
@@ -11,11 +7,11 @@
 # define DEBUG_PRINT(x) do {} while (0)
 #endif
 
-#ifndef SYNAPSE_H
-#define SYNAPSE_H
+#ifndef Parameters_H
+#define Parameters_H
 
 
-struct Parameters{
+ struct Parameters{
   int num_inputs;
   int num_neurons;
   int num_outputs;
@@ -23,6 +19,9 @@ struct Parameters{
   float learning_rate;
   float threshold;
   float activity_discount_factor;
+  float max_weight_value;
+  float max_start_weight_sum;
+  float min_weight;
 };
 
 
