@@ -9,12 +9,12 @@ if __name__ == "__main__":
     pool = ThreadPool(processes=1)
 
     # evolution parameters
-    generations = 50
+    generations = 100
     sigma_divisor = 15
-    mutate_percent = 4
-    mating_pool_size = 16
+    mutate_percent = 5
+    mating_pool_size = 64
     batch_size = int(cpu_count()) - 1
-    num_agents = 20 * batch_size    # must be a multiple of batch size
+    num_agents = 100 * batch_size    # must be a multiple of batch size
     num_batches = int(num_agents/batch_size)
     print("batch size: " + str(batch_size))
 
@@ -32,8 +32,11 @@ if __name__ == "__main__":
     ]
 
     params = np.zeros(shape=(num_agents, len(params_start)))
-    # mutate params_start to each agent params
-    params[:] = mutate(params_start, sigma_divisor, 95)
+    # copy params_start
+    params[:] = params_start
+    # mutate all params
+    for agent_params in params:
+        agent_params = mutate(agent_params, sigma_divisor, 100)
     score_index = len(params_start)
 
     for generation in range(generations):
