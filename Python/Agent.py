@@ -28,7 +28,7 @@ class Agent:
 
         print(brain_parameters)
         spikingann.init(brain_parameters)
-        scores_deque = collections.deque(maxlen=10)
+        scores_deque = collections.deque(maxlen=20)
 
         for i in range(200):
             steps = 0
