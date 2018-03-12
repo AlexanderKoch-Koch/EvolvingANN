@@ -20,6 +20,9 @@ void compute(struct Synapse **synapses, int *neuron_outputs, struct Parameters *
     }
 
     neuron_outputs[neuron] = (weighted_sum > p->threshold) ? 1 : 0;
+    if(rand() % 50 == 0){
+      neuron_outputs[neuron] = 1;
+    }
     sum_outputs += neuron_outputs[neuron];
 
     for(int synapse = 0; synapse < p->num_synapses_per_neuron; synapse++){

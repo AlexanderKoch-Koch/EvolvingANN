@@ -26,7 +26,8 @@ class Agent:
             "num_inputs": num_inputs
         }
 
-        #print(self.params)
+        print(self.params)
+        print(brain_parameters)
         spikingann.init(brain_parameters)
         scores_deque = collections.deque(maxlen=10)
 
@@ -53,7 +54,7 @@ class Agent:
 
                 env.render()
                 spikingann.reward(reward)
-                # time.sleep(0.01)
+                time.sleep(0.01)
                 steps += 1
 
             spikingann.reset_memory()
@@ -63,7 +64,7 @@ class Agent:
 
 
 params = [
-    5.1382227e+00,
+    10.1382227e+00,
     1.0505338e+00,
     1.2871541e+01,
     4.8885125e-01,

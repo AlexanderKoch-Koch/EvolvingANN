@@ -9,9 +9,9 @@ if __name__ == "__main__":
     pool = ThreadPool(processes=1)
 
     # evolution parameters
-    generations = 100
+    generations = 200
     sigma_divisor = 15
-    mutate_percent = 5
+    mutate_percent = 2
     mating_pool_size = 64
     batch_size = int(cpu_count()) - 1
     num_agents = 100 * batch_size    # must be a multiple of batch size

@@ -20,7 +20,7 @@ float rand_range(float min_n, float max_n)
 
 void init_brain(struct Parameters parameters){
   p = parameters;
-
+  DEBUG_PRINT(("num_neruons: %d, num_synaopses_per_neuron: %d\n", p.num_neurons, p.num_synapses_per_neuron));
   //allocate memory
   brain_inputs = (int*) calloc(p.num_inputs, sizeof(int));
   neuron_outputs = (int*) calloc(p.num_neurons, sizeof(int));
