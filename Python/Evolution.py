@@ -10,10 +10,11 @@ if __name__ == "__main__":
 
     # evolution parameters
     generations = 50
-    num_agents = 99
     sigma_divisor = 15
-    mutate_percent = 5
+    mutate_percent = 4
+    mating_pool_size = 16
     batch_size = int(cpu_count()) - 1
+    num_agents = 20 * batch_size    # must be a multiple of batch size
     num_batches = int(num_agents/batch_size)
     print("batch size: " + str(batch_size))
 
@@ -30,12 +31,10 @@ if __name__ == "__main__":
         0.01      # min_weight
     ]
 
-
-    #int_params_indexes = [0, 1, 2, 3, 4, 5, 6, 9, 12]
-
     params = np.zeros(shape=(num_agents, len(params_start)))
     # mutate params_start to each agent params
     params[:] = mutate(params_start, sigma_divisor, 95)
+    score_index = len(params_start)
 
     for generation in range(generations):
         # for each generation
@@ -50,7 +49,6 @@ if __name__ == "__main__":
             # start processes of this batch
             for batch_agent in range(batch_size):
                 i = batch_agent + batch * batch_size
-                print("current agent: " + str(i))
                 params[i] = mutate(params[i], sigma_divisor, mutate_percent)
                 agents[i][0:-1] = params[i]
                 agent = Agent(agents[i][0:len(agents[i] - 1)])
@@ -61,10 +59,8 @@ if __name__ == "__main__":
             # wait for all processes in this batch to finish
             for batch_agent in range(batch_size):
                 i = batch_agent + batch * batch_size
-                print("waiting for: " + str(i))
                 processes[i].join()
 
-        score_index = len(params_start)
         for a in range(num_agents):
             agents[a][score_index] = queues[a].get()
 
@@ -75,7 +71,7 @@ if __name__ == "__main__":
         print(agents[:, score_index])
         print(agents[-1:, :])
 
-        mating_params = create_mating_pool(agents, 16)
+        mating_params = create_mating_pool(agents, mating_pool_size)
         params = crossover(mating_params, num_agents)
 
 

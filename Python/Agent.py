@@ -26,11 +26,11 @@ class Agent:
             "num_inputs": num_inputs
         }
 
-        #print(self.params)
+        print(brain_parameters)
         spikingann.init(brain_parameters)
         scores_deque = collections.deque(maxlen=10)
 
-        for i in range(1000):
+        for i in range(200):
             steps = 0
             is_done = False
             observation = env.reset()
