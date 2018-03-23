@@ -12,3 +12,4 @@ C/PythonModule/build/
 __pycache__/
 *.pyc
 .c9/
+/cuda/build/
