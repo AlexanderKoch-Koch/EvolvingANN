@@ -11,3 +11,4 @@ C/PythonModule/build/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+.c9/
