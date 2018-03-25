@@ -12,4 +12,6 @@ C/PythonModule/build/
 __pycache__/
 *.pyc
 .c9/
-/cuda/build/
+objects/
+cuda/objects/Visualize.o
+*.o

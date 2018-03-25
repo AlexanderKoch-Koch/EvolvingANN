@@ -3,4 +3,12 @@
 
 void init();
 
+int* think(int *inputs);
+
+void process_reward(float reward);
+
+void reset_memory();
+
+void release_memory();
+
 #endif
