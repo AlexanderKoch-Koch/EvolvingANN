@@ -1,4 +1,4 @@
-import eann
+import cuda.eann as eann
 
 eann.init(2)
 
