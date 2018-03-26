@@ -3,3 +3,4 @@
 #define NUM_OUTPUTS 3
 #define NUM_SYNAPSES_PER_NEURON 4
 #define THRESHOLD 0
+#define LEARNING_RATE 0.01

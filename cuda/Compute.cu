@@ -15,6 +15,7 @@ __global__ void compute_synapses(struct Synapse *d_synapses, float *d_weighted_s
     //printf("neuron: %d, synapse: %d,  adding %d\n", neuron, synapse, *neuron_array[synapse].p_presynaptic_output);
 }
 
+
 __global__ void compute_neurons(int *d_neuron_outputs, float *d_weighted_sums){
     int neuron = blockIdx.x * blockDim.x + threadIdx.x;
     
@@ -27,4 +28,14 @@ __global__ void compute_neurons(int *d_neuron_outputs, float *d_weighted_sums){
     
     //reset weighted sum
     d_weighted_sums[neuron] = 0.0;
+}
+
+
+__global__ void learn(struct Synapse *d_synapses, float reward, size_t pitch){
+    int synapse = blockIdx.x*blockDim.x + threadIdx.x;
+    int neuron = blockIdx.y*blockDim.y + threadIdx.y;
+
+    struct Synapse *neuron_array = (struct Synapse *) ((char*)d_synapses + neuron * pitch);
+    
+    neuron_array[synapse].weight += LEARNING_RATE * reward * neuron_array[synapse].activity;
 }
