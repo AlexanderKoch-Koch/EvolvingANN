@@ -7,14 +7,14 @@ eann.so:  objects/EvolvingANN.o objects/Brain.o objects/BrainSetup.o objects/Vis
 objects/EvolvingANN.o:  EvolvingANN.cu
 	nvcc --compiler-options '-fPIC' -o objects/EvolvingANN.o -c EvolvingANN.cu  -I/usr/include/python3.5
 	
-objects/Brain.o:  Brain.cu
+objects/Brain.o:  Brain.cu Hyperparameters.h
 	nvcc --compiler-options '-fPIC' -o objects/Brain.o -c Brain.cu
 	
-objects/BrainSetup.o:  BrainSetup.cu
+objects/BrainSetup.o:  BrainSetup.cu Hyperparameters.h
 	nvcc --compiler-options '-fPIC' -o objects/BrainSetup.o -c BrainSetup.cu
 	
-objects/Visualize.o:  Visualize.cu
+objects/Visualize.o:  Visualize.cu Hyperparameters.h
 	nvcc --compiler-options '-fPIC' -o objects/Visualize.o -c Visualize.cu
 	
-objects/Compute.o:  Compute.cu
+objects/Compute.o:  Compute.cu Hyperparameters.h
 	nvcc --compiler-options '-fPIC' -o objects/Compute.o -c Compute.cu

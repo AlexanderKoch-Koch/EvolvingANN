@@ -13,10 +13,11 @@ struct Synapse *d_synapses;
 int *d_neuron_outputs;
 float *d_weighted_sums;
 int *d_brain_inputs;
-curandState_t curand_state;
+curandState_t *d_curand_state;
 
 void init(){
-    init_random_seed<<<1, 1>>>(1, curand_state);
+    cudaMalloc(&d_curand_state, sizeof(curandState_t));
+    init_random_seed<<<1, 1>>>(1, d_curand_state);
     //allocate memory on the device
     cudaMalloc(&d_brain_inputs, sizeof(int) * NUM_INPUTS);
     cudaMalloc(&d_weighted_sums, sizeof(float) * NUM_NEURONS);
@@ -24,7 +25,7 @@ void init(){
     cudaMallocPitch(&d_synapses, &dev_pitch, NUM_SYNAPSES_PER_NEURON * sizeof(struct Synapse), NUM_NEURONS);
     
     // initialize brain
-    init_synapses<<<1, synapses_dim>>>(d_synapses, dev_pitch, d_neuron_outputs, d_brain_inputs, curand_state);
+    init_synapses<<<1, synapses_dim>>>(d_synapses, dev_pitch, d_neuron_outputs, d_brain_inputs, d_curand_state);
     init_neurons<<<1, NUM_NEURONS>>>(d_neuron_outputs, d_weighted_sums);
     cudaDeviceSynchronize();
     
@@ -45,7 +46,7 @@ int* think(int *inputs){
     //decide Threshold
     compute_neurons<<<1, NUM_NEURONS>>>(d_neuron_outputs, d_weighted_sums);
     cudaDeviceSynchronize();
-    
+    tag_synapses<<<1, synapses_dim>>>(d_synapses, d_neuron_outputs, dev_pitch);
     //copy results back to host
     int *outputs = (int*) malloc(sizeof(int) * NUM_OUTPUTS);
     cudaMemcpy(outputs, d_neuron_outputs, sizeof(int) * NUM_OUTPUTS, cudaMemcpyDeviceToHost);
@@ -57,7 +58,7 @@ void process_reward(float reward){
 }
 
 void reset_memory(){
-    
+    reset_synapses<<<1, synapses_dim>>>(d_synapses, d_weighted_sums, dev_pitch);
 }
 
 void release_memory(){

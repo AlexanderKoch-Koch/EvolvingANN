@@ -5,14 +5,6 @@
 
 static PyObject *eann_init(PyObject *self, PyObject *args)
 {
-  int number;
-
-    if (!PyArg_ParseTuple(args, "i", &number))
-    {
-      printf("This function takes an integer");
-      return NULL;
-    }
-  printf("your number is %d", number);
   init();
   Py_RETURN_NONE;
 }
