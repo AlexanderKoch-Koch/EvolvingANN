@@ -21,7 +21,7 @@ __global__ void init_synapses(struct Synapse *d_synapses, size_t pitch, int *d_n
     int neuron = blockIdx.y*blockDim.y + threadIdx.y;
 
     skipahead(synapse * (neuron + 1), d_curand_state);
-    float new_weight = curand_uniform(d_curand_state);
+    float new_weight = curand_uniform(d_curand_state) + MIN_START_WEIGHT;
     
     struct Synapse *neuron_array = (struct Synapse *) ((char*)d_synapses + neuron * pitch);
     neuron_array[synapse].weight = new_weight;

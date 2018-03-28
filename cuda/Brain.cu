@@ -55,6 +55,7 @@ int* think(int *inputs){
 
 void process_reward(float reward){
     printf("reward is %.2f", reward);
+    learn<<<1, synapses_dim>>>(d_synapses, reward, dev_pitch);
 }
 
 void reset_memory(){
