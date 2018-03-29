@@ -40,13 +40,14 @@ int* think(int *inputs){
     cudaMemcpy(d_brain_inputs, inputs, sizeof(int) * NUM_INPUTS, cudaMemcpyHostToDevice);
     
     //sum up the inputs
-    compute_synapses<<<1, synapses_dim>>>(d_synapses, d_weighted_sums, dev_pitch);
+    //compute_synapses<<<1, synapses_dim>>>(d_synapses, d_weighted_sums, dev_pitch);
+    read<<<1, synapses_dim>>>(d_synapses, dev_pitch);
     cudaDeviceSynchronize();
     
     //decide Threshold
-    compute_neurons<<<1, NUM_NEURONS>>>(d_neuron_outputs, d_weighted_sums);
+    compute_neurons<<<1, NUM_NEURONS>>>(d_synapses, d_neuron_outputs, dev_pitch);
     cudaDeviceSynchronize();
-    tag_synapses<<<1, synapses_dim>>>(d_synapses, d_neuron_outputs, dev_pitch);
+    //tag_synapses<<<1, synapses_dim>>>(d_synapses, d_neuron_outputs, dev_pitch);
     //copy results back to host
     int *outputs = (int*) malloc(sizeof(int) * NUM_OUTPUTS);
     cudaMemcpy(outputs, d_neuron_outputs, sizeof(int) * NUM_OUTPUTS, cudaMemcpyDeviceToHost);

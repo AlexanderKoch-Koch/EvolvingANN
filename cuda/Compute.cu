@@ -16,17 +16,32 @@ __global__ void compute_synapses(struct Synapse *d_synapses, float *d_weighted_s
 }
 
 
-__global__ void compute_neurons(int *d_neuron_outputs, float *d_weighted_sums){
+__global__ void compute_neurons(struct Synapse *d_synapses, int *d_neuron_outputs, size_t pitch){
     int neuron = blockIdx.x * blockDim.x + threadIdx.x;
-    
-    if(d_weighted_sums[neuron] >= THRESHOLD){
+    struct Synapse *neuron_array = (struct Synapse *) ((char*)d_synapses + neuron * pitch);
+    float weighted_sum = 0.0;
+    for(int synapse = 0; synapse < NUM_SYNAPSES_PER_NEURON; synapse++){
+        weighted_sum += neuron_array[synapse].input * neuron_array[synapse].weight;
+    }
+    if(weighted_sum >= THRESHOLD){
         d_neuron_outputs[neuron] = 1;
     }else{
         d_neuron_outputs[neuron] = 0;
     }
+    for(int synapse = 0; synapse < NUM_SYNAPSES_PER_NEURON; synapse++){
+        neuron_array[synapse].activity *= ACTIVITY_DISCOUNT_FACTOR;
+        neuron_array[synapse].activity += neuron_array[synapse].input * d_neuron_outputs[neuron] * neuron_array[synapse].weight;
+    }
+}
+
+
+__global__ void read(struct Synapse *d_synapses, size_t pitch){
+    int synapse = blockIdx.x*blockDim.x + threadIdx.x;
+    int neuron = blockIdx.y*blockDim.y + threadIdx.y;
+
+    struct Synapse *neuron_array = (struct Synapse *) ((char*)d_synapses + neuron * pitch);
     
-    //reset weighted sum
-    d_weighted_sums[neuron] = 0.0;
+    neuron_array[synapse].input = (*neuron_array[synapse].p_presynaptic_output);
 }
 
 
