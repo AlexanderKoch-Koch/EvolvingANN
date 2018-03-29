@@ -41,7 +41,9 @@ __global__ void read(struct Synapse *d_synapses, size_t pitch){
 
     struct Synapse *neuron_array = (struct Synapse *) ((char*)d_synapses + neuron * pitch);
     
-    neuron_array[synapse].input = (*neuron_array[synapse].p_presynaptic_output);
+    for(int synapse = 0; synapse < NUM_SYNAPSES_PER_NEURON; synapse++){
+        neuron_array[synapse].input = (*neuron_array[synapse].p_presynaptic_output);
+    }
 }
 
 
