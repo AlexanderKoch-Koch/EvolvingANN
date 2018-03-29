@@ -62,8 +62,9 @@ __global__ void learn(struct Synapse *d_synapses, float reward, size_t pitch){
     int neuron = blockIdx.y*blockDim.y + threadIdx.y;
 
     struct Synapse *neuron_array = (struct Synapse *) ((char*)d_synapses + neuron * pitch);
-    
-    neuron_array[synapse].weight += LEARNING_RATE * reward * neuron_array[synapse].activity;
+    for(int synapse = 0; synapse < NUM_SYNAPSES_PER_NEURON; synapse++){
+        neuron_array[synapse].weight += LEARNING_RATE * reward * neuron_array[synapse].activity;
+    }
 }
 
 
@@ -73,7 +74,9 @@ __global__ void reset_synapses(struct Synapse *d_synapses, float *d_weighted_sum
 
     struct Synapse *neuron_array = (struct Synapse *) ((char*)d_synapses + neuron * pitch);
     
-    neuron_array[synapse].input = 0;
-    neuron_array[synapse].activity = 0;
-    d_weighted_sums[neuron] = 0;
+    for(int synapse = 0; synapse < NUM_SYNAPSES_PER_NEURON; synapse++){
+        neuron_array[synapse].input = 0;
+        neuron_array[synapse].activity = 0;
+    }
+    
 }
