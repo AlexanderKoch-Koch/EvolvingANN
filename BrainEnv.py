@@ -13,8 +13,9 @@ for i in range(1000):
     is_done = False
     observation = env.reset()
     while not is_done:
+        inputs = preprocess_inputs(observation)
         start = time.clock()
-        output = eann.think(preprocess_inputs(observation))
+        output = eann.think(inputs)
         elapsed = time.clock()
         elapsed = elapsed - start
         print("\n" + str(elapsed) + "s")
@@ -29,7 +30,7 @@ for i in range(1000):
             reward = 0.005
 
         #env.render()
-        eann.reward(reward)
+        #eann.reward(reward)
         time.sleep(0.01)
         steps += 1
 
