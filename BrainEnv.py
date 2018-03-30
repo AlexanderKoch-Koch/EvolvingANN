@@ -5,7 +5,7 @@ from Preprocessing import preprocess_inputs
 
 env = gym.make('CartPole-v0')
 
-
+print("brain input size: " + str(len(preprocess_inputs(env.reset()))))
 eann.init()
 
 for i in range(1000):
@@ -18,7 +18,8 @@ for i in range(1000):
         output = eann.think(inputs)
         elapsed = time.clock()
         elapsed = elapsed - start
-        print("\n" + str(elapsed) + "s")
+        # print("\n" + str(elapsed) + "s")
+        #print(output[0])
         if output[0] > 0:
             action = 1
         else:
@@ -30,9 +31,9 @@ for i in range(1000):
             reward = 0.005
 
         #env.render()
-        #eann.reward(reward)
+        eann.reward(reward)
         time.sleep(0.01)
         steps += 1
 
-    eann.reset_memory()
-    print(steps)
+    #eann.reset_memory()
+    print("result: " + str(steps))

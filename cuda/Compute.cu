@@ -50,7 +50,6 @@ __global__ void learn(struct Synapse *d_synapses, float reward, size_t pitch, in
             neuron_array[synapse].weight += LEARNING_RATE * reward * neuron_array[synapse].activity;
             //randomly reconnect if weight too small
             if(fabsf(neuron_array[synapse].weight) < MIN_ABS_WEIGHT){
-                printf("reconnect");
                 float new_weight = curand_uniform(d_curand_state) + MIN_START_WEIGHT;
             
                 neuron_array[synapse].weight = new_weight;
