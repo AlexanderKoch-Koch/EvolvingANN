@@ -29,7 +29,7 @@ static PyObject *eann_think(PyObject *self, PyObject *args)
   brain_input = (int*) malloc(sizeof(int) * len);
   for(int element = 0; element < len; element++){
     PyObject *next = PyIter_Next(iter);
-    brain_input[element] = PyFloat_AsDouble(next);
+    brain_input[element] = (int) PyFloat_AsDouble(next);
   }
 
   int *outputs = think(brain_input);

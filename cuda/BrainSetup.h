@@ -11,7 +11,4 @@ __global__ void init_synapses(struct Synapse *d_synapses, size_t pitch, int *d_n
 
 __global__ void init_neurons(int *d_neuron_outputs, float *d_weighted_sums);
 
-__device__ void create_synapse(struct Synapse *d_synapse, int *d_neuron_outputs, int *d_brain_inputs, curandState_t *d_curand_state);
-
-
 #endif
