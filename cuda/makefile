@@ -1,20 +1,23 @@
 
-# ---- Link ---------------------------
-eann.so:  objects/EvolvingANN.o objects/Brain.o objects/BrainSetup.o objects/Visualize.o objects/Compute.o
-	gcc --shared  -o eann.so  objects/EvolvingANN.o objects/Brain.o objects/BrainSetup.o objects/Visualize.o objects/Compute.o -I/usr/local/cuda/include -L/usr/local/cuda/lib64 -l cudart
- 
-# ---- Cuda compile ------------------
-objects/EvolvingANN.o:  EvolvingANN.cu
-	nvcc --compiler-options '-fPIC' -o objects/EvolvingANN.o -c EvolvingANN.cu  -I/usr/include/python3.5
+OBJDIR = objects
+SRCDIR = src
+
+LDFLAGS = -I/usr/local/cuda/include -L/usr/local/cuda/lib64 -l cudart
+NVCCFLAGS = -I/usr/include/python3.5 -Iheaders/ -I./
+
+SOURCES = $(wildcard $(SRCDIR)/*.cu)
+OBJECTS = $(patsubst %.cu, %.o, $(addprefix $(OBJDIR)/, $(notdir $(SOURCES))))
+
+HEADERS = $(wildcard headers/*.h)
+
+
+eann.so:  $(OBJECTS)
+	gcc --shared  -o eann.so  $(OBJECTS) $(LDFLAGS)
 	
-objects/Brain.o:  Brain.cu Hyperparameters.h
-	nvcc --compiler-options '-fPIC' -o objects/Brain.o -c Brain.cu
 	
-objects/BrainSetup.o:  BrainSetup.cu Hyperparameters.h
-	nvcc --compiler-options '-fPIC' -o objects/BrainSetup.o -c BrainSetup.cu
+$(OBJDIR)/%.o: $(SRCDIR)/%.cu
+	nvcc --compiler-options '-fPIC' -c $< $(NVCCFLAGS) -o $@
 	
-objects/Visualize.o:  Visualize.cu Hyperparameters.h
-	nvcc --compiler-options '-fPIC' -o objects/Visualize.o -c Visualize.cu
 	
-objects/Compute.o:  Compute.cu Hyperparameters.h
-	nvcc --compiler-options '-fPIC' -o objects/Compute.o -c Compute.cu
+clean:
+	rm -f $(OBJDIR)/*.o eann.so

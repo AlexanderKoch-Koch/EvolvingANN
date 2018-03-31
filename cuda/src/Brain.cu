@@ -18,15 +18,7 @@ int *d_brain_inputs;
 curandState_t *d_curand_state;
 
 
-struct test{
-  float weight;
-  float activity;
-  int input;
-  int *p_presynaptic_output;
-};
-
 void init(){
-    printf("size: %zu", sizeof(struct test));
     printf("syanpses memory usage: %zu Bytes", sizeof(struct Synapse) * NUM_NEURONS * NUM_SYNAPSES_PER_NEURON);
     printf("num_neurons: %d block size: %d grid size: %d", NUM_NEURONS, block_dim.x, grid_dim.x);
     CudaSafeCall( cudaMalloc(&d_curand_state, sizeof(curandState_t)) );
@@ -54,7 +46,7 @@ int* think(int *inputs){
     CudaCheckError();
     cudaDeviceSynchronize();
     
-    compute_neurons<<<grid_dim, block_dim>>>(d_synapses, d_neuron_outputs, dev_pitch);
+    compute_neurons<<<grid_dim, block_dim>>>(d_synapses, d_neuron_outputs, dev_pitch, d_curand_state);
     cudaDeviceSynchronize();
     CudaCheckError();
     neuron_stats(d_neuron_outputs);

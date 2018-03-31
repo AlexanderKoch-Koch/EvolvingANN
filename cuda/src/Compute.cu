@@ -6,7 +6,7 @@
 
 
 
-__global__ void compute_neurons(struct Synapse *d_synapses, int *d_neuron_outputs, size_t pitch){
+__global__ void compute_neurons(struct Synapse *d_synapses, int *d_neuron_outputs, size_t pitch, curandState_t *curand_state){
     int neuron = blockIdx.x * blockDim.x + threadIdx.x;
     if(neuron < NUM_NEURONS){
         struct Synapse *neuron_array = (struct Synapse *) ((char*)d_synapses + neuron * pitch);
