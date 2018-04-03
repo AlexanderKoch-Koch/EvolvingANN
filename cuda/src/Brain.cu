@@ -23,9 +23,8 @@ int *d_brain_inputs;
 void init(){
     printf("syanpses memory usage: %zu Bytes", sizeof(struct Synapse) * NUM_NEURONS * NUM_SYNAPSES_PER_NEURON);
     printf("num_neurons: %d block size: %d grid size: %d", NUM_NEURONS, block_dim.x, grid_dim.x);
-    cudaMalloc(&d_curand_state, sizeof(curandState_t));
-    printf("time: %ld", time(NULL));
-    init_random_seed<<<1, 1>>>(time(NULL), d_curand_state);
+    cudaMalloc(&d_curand_state, sizeof(curandState_t) * NUM_NEURONS);
+    init_random_seed<<<grid_dim, block_dim>>>(time(NULL), d_curand_state);
     
     //allocate memory on the device
     cudaMalloc(&d_parameters, sizeof(struct Parameters));
@@ -35,7 +34,7 @@ void init(){
     cudaMallocPitch(&d_synapses, &synapses_pitch, NUM_SYNAPSES_PER_NEURON * sizeof(struct Synapse), NUM_NEURONS);
     
     struct Parameters start_parameters;
-    start_parameters.threshold_randomness_factor = 0.3;
+    start_parameters.threshold_randomness_factor = 0.5;
     cudaMemcpy(d_parameters, &start_parameters, sizeof(struct Parameters), cudaMemcpyHostToDevice);
     // initialize brain
     init_synapses<<<grid_dim, block_dim>>>(d_synapses, synapses_pitch, d_neuron_outputs, d_brain_inputs, d_curand_state);
