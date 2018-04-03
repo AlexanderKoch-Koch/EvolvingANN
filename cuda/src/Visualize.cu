@@ -7,11 +7,16 @@
 
 
 __global__ void printSynapses(struct Synapse *d_synapses, size_t pitch){
-    int synapse = blockIdx.x*blockDim.x + threadIdx.x;
-    int neuron = blockIdx.y*blockDim.y + threadIdx.y;
-
-    struct Synapse *row_a = (struct Synapse *) ((int*)d_synapses + neuron * pitch);
-    printf("neuron: %d, synapse: %d, weight: %.2f, activity: %.2f, input: %d\n", neuron, synapse, row_a[synapse].weight, row_a[synapse].activity, row_a[synapse].input);
+    int neuron = blockIdx.x * blockDim.x + threadIdx.x;
+    if(neuron < NUM_NEURONS){
+        struct Synapse *neuron_array = (struct Synapse *) ((char*)d_synapses + neuron * pitch);
+        for(int synapse = 0; synapse< NUM_SYNAPSES_PER_NEURON; synapse++){
+            printf("neuron: %d, synapse: %d, weight: %.2f, activity: %.2f, input: %d\n",
+                neuron, synapse, neuron_array[synapse].weight,
+                neuron_array[synapse].activity, neuron_array[synapse].input);
+        }
+    }
+    
 }
 
 __global__ void printNeurons(int *d_neuron_outputs, float *d_weighted_sums){

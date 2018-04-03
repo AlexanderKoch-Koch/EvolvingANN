@@ -57,8 +57,6 @@ static PyObject *eann_reward(PyObject *self, PyObject *args)
     Py_RETURN_NONE;
 }
 
-
-
 static PyObject *eann_release_memory(PyObject *self, PyObject *args)
 {
     release_memory();

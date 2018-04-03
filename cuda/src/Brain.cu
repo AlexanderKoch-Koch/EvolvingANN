@@ -6,12 +6,13 @@
 #include "Visualize.h"
 #include "Compute.h"
 #include "Hyperparameters.h"
-#include "CudaError.h"
+#include "Parameters.h"
 
 dim3 block_dim(512, 1, 1);
 dim3 grid_dim((NUM_NEURONS + block_dim.x - 1) / block_dim.x);
 curandState_t *d_curand_state;
 
+struct Parameters *d_parameters;
 struct Synapse *d_synapses;
 size_t synapses_pitch;
 int *d_neuron_outputs;
@@ -22,35 +23,38 @@ int *d_brain_inputs;
 void init(){
     printf("syanpses memory usage: %zu Bytes", sizeof(struct Synapse) * NUM_NEURONS * NUM_SYNAPSES_PER_NEURON);
     printf("num_neurons: %d block size: %d grid size: %d", NUM_NEURONS, block_dim.x, grid_dim.x);
-    CudaSafeCall( cudaMalloc(&d_curand_state, sizeof(curandState_t)) );
+    cudaMalloc(&d_curand_state, sizeof(curandState_t));
+    printf("time: %ld", time(NULL));
     init_random_seed<<<1, 1>>>(time(NULL), d_curand_state);
-    //allocate memory on the device
-    CudaSafeCall( cudaMalloc(&d_brain_inputs, sizeof(int) * NUM_INPUTS) );
-    CudaSafeCall( cudaMalloc(&d_weighted_sums, sizeof(float) * NUM_NEURONS) );
-    CudaSafeCall( cudaMalloc(&d_neuron_outputs, sizeof(int) * NUM_NEURONS) );
-    CudaSafeCall( cudaMallocPitch(&d_synapses, &synapses_pitch, NUM_SYNAPSES_PER_NEURON * sizeof(struct Synapse), NUM_NEURONS) );
     
+    //allocate memory on the device
+    cudaMalloc(&d_parameters, sizeof(struct Parameters));
+    cudaMalloc(&d_brain_inputs, sizeof(int) * NUM_INPUTS);
+    cudaMalloc(&d_weighted_sums, sizeof(float) * NUM_NEURONS);
+    cudaMalloc(&d_neuron_outputs, sizeof(int) * NUM_NEURONS);
+    cudaMallocPitch(&d_synapses, &synapses_pitch, NUM_SYNAPSES_PER_NEURON * sizeof(struct Synapse), NUM_NEURONS);
+    
+    struct Parameters start_parameters;
+    start_parameters.threshold_randomness_factor = 0.3;
+    cudaMemcpy(d_parameters, &start_parameters, sizeof(struct Parameters), cudaMemcpyHostToDevice);
     // initialize brain
     init_synapses<<<grid_dim, block_dim>>>(d_synapses, synapses_pitch, d_neuron_outputs, d_brain_inputs, d_curand_state);
-    CudaCheckError();
 }
 
 
 int* think(int *inputs){
     //set brain inputs
     cudaMemcpy(d_brain_inputs, inputs, sizeof(int) * NUM_INPUTS, cudaMemcpyHostToDevice);
-    CudaCheckError();
 
     //read
+    update_parameters<<<1, 1>>>(d_parameters);
     read<<<grid_dim, block_dim>>>(d_synapses, synapses_pitch);
-    CudaCheckError();
     cudaDeviceSynchronize();
     
     //compute
     compute<<<grid_dim, block_dim>>>(d_synapses, d_neuron_outputs, synapses_pitch, d_curand_state);
     cudaDeviceSynchronize();
-    CudaCheckError();
-    
+
     //show info
     //neuron_stats(d_neuron_outputs);
     //printSynapses<<<grid_dim, block_dim>>>(d_synapses, synapses_pitch);

@@ -41,7 +41,7 @@ for i in range(1000):
         output = eann.think(inputs)
         elapsed = time.clock()
         elapsed = elapsed - start
-        # print("\n" + str(elapsed) + "s")
+        #print("\n" + str(elapsed) + "s")
         #print(output[0])
         if output[0] > 0:
             action = 1
@@ -58,5 +58,5 @@ for i in range(1000):
         time.sleep(0.01)
         steps += 1
 
-    #eann.reset_memory()
+    eann.reset_memory()
     print("result: " + str(steps))
