@@ -1,6 +1,7 @@
 import eann
 import gym
 import time
+from timeit import default_timer as timer
 
 
 def float_to_binary_list(float_value, precision, len_list):
@@ -32,16 +33,18 @@ print("brain input size: " + str(len(preprocess_inputs(env.reset()))))
 eann.init()
 
 for i in range(1000):
+    start_iteration = timer()
     steps = 0
     is_done = False
     observation = env.reset()
     while not is_done:
+        start = timer()
         inputs = preprocess_inputs(observation)
-        start = time.clock()
+        
         output = eann.think(inputs)
-        elapsed = time.clock()
+        elapsed = timer()
         elapsed = elapsed - start
-        #print("\n" + str(elapsed) + "s")
+        #print("compute: " + str(elapsed) + "s")
         #print(output[0])
         if output[0] > 0:
             action = 1
@@ -54,9 +57,14 @@ for i in range(1000):
             reward = 0.005
 
         #env.render()
+        start = timer()
         eann.reward(reward)
-        time.sleep(0.01)
+        
         steps += 1
-
+        elapsed = timer()
+        elapsed = elapsed - start
+        #print("reward processing: " + str(elapsed) + "s")
+    
     eann.reset_memory()
-    print("result: " + str(steps))
+    elapsed = timer() - start_iteration
+    print("result: " + str(steps) + "   " + str(elapsed/steps) + "s per step")
