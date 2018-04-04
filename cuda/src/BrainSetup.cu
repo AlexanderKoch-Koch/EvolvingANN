@@ -24,8 +24,9 @@ __global__ void init_synapses(struct Synapse *d_synapses, size_t pitch, int *d_n
         for(int synapse = 0; synapse < NUM_SYNAPSES_PER_NEURON; synapse++){
             //random weight between MIN_START_WEIGHT and MIN_START_WEIGHT + 1
             float new_weight = curand_uniform(&d_curand_state[neuron]) + MIN_START_WEIGHT;
-            //printf("neuron %d synapse: %d weight %.2f\n", neuron, synapse, new_weight);
             neuron_array[synapse].weight = new_weight;
+            neuron_array[synapse].activity = 0.0;
+            //printf("neuron %d synapse: %d weight %.2f activity: %.2f\n", neuron, synapse, neuron_array[synapse].weight, neuron_array[synapse].activity);
             //random input
             int rand_input = curand(&d_curand_state[neuron]) % (NUM_NEURONS + NUM_INPUTS);
             if(rand_input < NUM_NEURONS){
