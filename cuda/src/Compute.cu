@@ -47,8 +47,8 @@ __global__ void learn(struct Synapse *d_synapses, float reward, size_t pitch, in
     if(neuron < NUM_NEURONS){
         struct Synapse *neuron_array = (struct Synapse *) ((char*)d_synapses + neuron * pitch);
         for(int synapse = 0; synapse < NUM_SYNAPSES_PER_NEURON; synapse++){
-            neuron_array[synapse].weight += LEARNING_RATE * reward * neuron_array[synapse].activity;
-            //neuron_array[synapse].weight += LEARNING_RATE * reward * neuron_array[synapse].activity * fabs(1 - fabs(neuron_array[synapse].weight));
+            //neuron_array[synapse].weight += LEARNING_RATE * reward * neuron_array[synapse].activity;
+            neuron_array[synapse].weight += LEARNING_RATE * reward * neuron_array[synapse].activity * fabs(MAX_ABS_WEIGHT - fabs(neuron_array[synapse].weight));
             //randomly reconnect if weight too small
             if(fabsf(neuron_array[synapse].weight) < MIN_ABS_WEIGHT){
                 float new_weight = curand_uniform(&d_curand_state[neuron]) + MIN_START_WEIGHT;
@@ -83,6 +83,6 @@ __global__ void reset_synapses(struct Synapse *d_synapses, float *d_weighted_sum
 
 
 __global__ void update_parameters(struct Parameters *d_parameters){
-    d_parameters->threshold_randomness_factor *= 0.999;
-    //printf("new factor %.2f\n", d_parameters->threshold_randomness_factor);
+    d_parameters->threshold_randomness_factor *= 0.99999;
+    //printf("new factor %.2f ", d_parameters->threshold_randomness_factor);
 }
