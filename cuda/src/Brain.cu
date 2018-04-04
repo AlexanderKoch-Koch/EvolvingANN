@@ -18,6 +18,7 @@ size_t synapses_pitch;
 int *d_neuron_outputs;
 float *d_weighted_sums;
 int *d_brain_inputs;
+unsigned long iteration_counter = 0;
 
 
 void init(){
@@ -54,13 +55,17 @@ int* think(int *inputs){
     compute<<<grid_dim, block_dim>>>(d_synapses, d_neuron_outputs, synapses_pitch, d_curand_state);
     cudaDeviceSynchronize();
 
-    //show info
-    //neuron_stats(d_neuron_outputs);
-    //printSynapses<<<grid_dim, block_dim>>>(d_synapses, synapses_pitch);
+    if(iteration_counter % 500 == 0){
+        //show info
+        neuron_stats(d_neuron_outputs);
+        printSynapses<<<grid_dim, block_dim>>>(d_synapses, synapses_pitch);
+        print_parameters<<<1, 1>>>(d_parameters);
+    }
     
     //get brain outputs
     int *outputs = (int*) malloc(sizeof(int) * NUM_OUTPUTS);
     cudaMemcpy(outputs, d_neuron_outputs, sizeof(int) * NUM_OUTPUTS, cudaMemcpyDeviceToHost);
+    iteration_counter++;
     return outputs;
 }
 
