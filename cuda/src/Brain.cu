@@ -22,6 +22,9 @@ unsigned long iteration_counter = 0;
 
 
 void init(){
+    //mark output start
+    printf("#################################################################################################");
+    printf("#################################################################################################");
     printf("syanpses memory usage: %zu Bytes", sizeof(struct Synapse) * NUM_NEURONS * NUM_SYNAPSES_PER_NEURON);
     printf("num_neurons: %d block size: %d grid size: %d", NUM_NEURONS, block_dim.x, grid_dim.x);
     cudaMalloc(&d_curand_state, sizeof(curandState_t) * NUM_NEURONS);
@@ -35,7 +38,7 @@ void init(){
     cudaMallocPitch(&d_synapses, &synapses_pitch, NUM_SYNAPSES_PER_NEURON * sizeof(struct Synapse), NUM_NEURONS);
     
     struct Parameters start_parameters;
-    start_parameters.threshold_randomness_factor = 0.5;
+    start_parameters.threshold_randomness_factor = THRESHOLD_RANDOMNESS_FACTOR_START;
     cudaMemcpy(d_parameters, &start_parameters, sizeof(struct Parameters), cudaMemcpyHostToDevice);
     // initialize brain
     init_synapses<<<grid_dim, block_dim>>>(d_synapses, synapses_pitch, d_neuron_outputs, d_brain_inputs, d_curand_state);
@@ -52,15 +55,16 @@ int* think(int *inputs){
     cudaDeviceSynchronize();
     
     //compute
-    compute<<<grid_dim, block_dim>>>(d_synapses, d_neuron_outputs, synapses_pitch, d_curand_state);
+    compute<<<grid_dim, block_dim>>>(d_synapses, d_neuron_outputs, synapses_pitch, d_curand_state, d_parameters);
     cudaDeviceSynchronize();
 
-    if(iteration_counter % 500 == 0){
+    /*if(iteration_counter % 500 == 0){
         //show info
+        printf("iteration: %ld\n", iteration_counter);
         neuron_stats(d_neuron_outputs);
         printSynapses<<<grid_dim, block_dim>>>(d_synapses, synapses_pitch);
         print_parameters<<<1, 1>>>(d_parameters);
-    }
+    }*/
     
     //get brain outputs
     int *outputs = (int*) malloc(sizeof(int) * NUM_OUTPUTS);

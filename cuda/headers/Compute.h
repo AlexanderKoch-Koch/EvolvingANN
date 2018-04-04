@@ -4,7 +4,7 @@
 #include <cuda.h>
 #include <curand_kernel.h>
 
-__global__ void compute(struct Synapse *d_synapses, int *d_neuron_outputs, size_t pitch, curandState_t *curand_state);
+__global__ void compute(struct Synapse *d_synapses, int *d_neuron_outputs, size_t pitch, curandState_t *curand_state, struct Parameters *d_parameters);
 
 __global__ void read(struct Synapse *d_synapses, size_t pitch);
 

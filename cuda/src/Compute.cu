@@ -7,7 +7,7 @@
 
 
 
-__global__ void compute(struct Synapse *d_synapses, int *d_neuron_outputs, size_t pitch, curandState_t *d_curand_state){
+__global__ void compute(struct Synapse *d_synapses, int *d_neuron_outputs, size_t pitch, curandState_t *d_curand_state, struct Parameters *d_parameters){
     int neuron = blockIdx.x * blockDim.x + threadIdx.x;
     if(neuron < NUM_NEURONS){
         struct Synapse *neuron_array = (struct Synapse *) ((char*)d_synapses + neuron * pitch);
@@ -15,7 +15,7 @@ __global__ void compute(struct Synapse *d_synapses, int *d_neuron_outputs, size_
         for(int synapse = 0; synapse < NUM_SYNAPSES_PER_NEURON; synapse++){
             weighted_sum += neuron_array[synapse].input * neuron_array[synapse].weight;
         }
-        float random = THRESHOLD_RANDOMNESS_FACTOR * curand_normal(&d_curand_state[neuron]);
+        float random = d_parameters->threshold_randomness_factor * curand_normal(&d_curand_state[neuron]);
         //printf("weighted_sum: %.2f, random_add: %.2f  ", weighted_sum, random);
         if(weighted_sum + random >= THRESHOLD){
             d_neuron_outputs[neuron] = 1;
@@ -53,7 +53,7 @@ __global__ void learn(struct Synapse *d_synapses, float reward, size_t pitch, in
             if(fabsf(neuron_array[synapse].weight) < MIN_ABS_WEIGHT){
                 float new_weight = curand_uniform(&d_curand_state[neuron]) + MIN_START_WEIGHT;
                 neuron_array[synapse].weight = new_weight;
-            
+                //printf("reconnecting");
                 int rand_input = curand(&d_curand_state[neuron]) % (NUM_NEURONS + NUM_INPUTS);
                 if(rand_input < NUM_NEURONS){
                     //connect to other neuron
