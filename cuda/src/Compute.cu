@@ -85,6 +85,6 @@ __global__ void reset_synapses(struct Synapse *d_synapses, float *d_weighted_sum
 
 
 __global__ void update_parameters(struct Parameters *d_parameters){
-    d_parameters->threshold_randomness_factor *= 0.9999;
+    d_parameters->threshold_randomness_factor *= 1;
     //printf("new factor %.2f ", d_parameters->threshold_randomness_factor);
 }
