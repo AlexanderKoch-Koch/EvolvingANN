@@ -25,7 +25,9 @@ __global__ void compute(struct Synapse *d_synapses, int *d_neuron_outputs, size_
         }
         for(int synapse = 0; synapse < NUM_SYNAPSES_PER_NEURON; synapse++){
             neuron_array[synapse].activity *= ACTIVITY_DISCOUNT_FACTOR;
-            neuron_array[synapse].activity += neuron_array[synapse].input * d_neuron_outputs[neuron] * neuron_array[synapse].weight;
+            //neuron_array[synapse].activity += neuron_array[synapse].input * d_neuron_outputs[neuron] * neuron_array[synapse].weight;
+            neuron_array[synapse].activity += neuron_array[synapse].input * fabs(neuron_array[synapse].weight) * (d_neuron_outputs[neuron] - 0.5);
+            //neuron_array[synapse].activity -= (neuron_array[synapse].input - d_neuron_outputs[neuron]);
         }
     }
 }
@@ -83,6 +85,6 @@ __global__ void reset_synapses(struct Synapse *d_synapses, float *d_weighted_sum
 
 
 __global__ void update_parameters(struct Parameters *d_parameters){
-    d_parameters->threshold_randomness_factor *= 0.99999;
+    d_parameters->threshold_randomness_factor *= 0.9999;
     //printf("new factor %.2f ", d_parameters->threshold_randomness_factor);
 }
