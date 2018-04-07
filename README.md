@@ -2,7 +2,7 @@
 
 An attempt to build a self-optimizing spiking artificial neural network with reward-driven Hebbian learning. Currently, it is tested in OpenAI's cartPole environment. The network is implemented in a Python C extension. This makes it easier to train the agent in simulated environments. The Python file Simulation.py, for instance, uses the C extension to master OpenAIs CartPole-v0 environment. In the beginning, the ANN was programmed in Python for testing.
 
-In the beginning, the ANN was completely programmed in Python. This Algorithm now contained in the C/PythonPrototype directory.
+![alt text](https://github.com/AlexanderKoch-Koch/EvolvingANN/blob/LTD/EANN_Performance.png "Learning performance in CartPole environment")
 
 # Example
 ![alt text](https://github.com/AlexanderKoch-Koch/EvolvingANN/blob/master/Example_Connectome.png "example connectome")
