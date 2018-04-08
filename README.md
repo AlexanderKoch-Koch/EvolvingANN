@@ -1,6 +1,6 @@
 # Spiking Artificial Neural Network
 
-An attempt to build a self-optimizing spiking artificial neural network with reward-driven Hebbian learning. Currently, it is tested in OpenAI's cartPole environment. The network is implemented in a Python C extension. This makes it easier to train the agent in simulated environments. The Python file Simulation.py, for instance, uses the C extension to master OpenAIs CartPole-v0 environment. In the beginning, the ANN was programmed in Python for testing.
+An attempt to build a spiking artificial neural network with a reward-driven Hebbian learning function. Since it doesn't rely on backpropagation it can be wired completely randomly. Synapses with low weights will be destroyed and replaced by a random connection. This should enable the ANN to evolve and optimize its own architecture. It can, for example, form a highly recurrent network which is similar to the  biological cerebrum.
 
 Scores in CartPole envionment with _max_episode_steps = 200
 ![alt text](https://github.com/AlexanderKoch-Koch/EvolvingANN/blob/LTD/ANN_Performance.PNG "Learning performance in CartPole environment")
