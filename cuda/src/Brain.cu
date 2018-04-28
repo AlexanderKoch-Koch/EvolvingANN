@@ -58,13 +58,14 @@ int* think(int *inputs){
     compute<<<grid_dim, block_dim>>>(d_synapses, d_neuron_outputs, synapses_pitch, d_curand_state, d_parameters);
     cudaDeviceSynchronize();
 
-    /*if(iteration_counter % 500 == 0){
+    if(iteration_counter % 5000 == 0){
         //show info
         printf("iteration: %ld\n", iteration_counter);
         neuron_stats(d_neuron_outputs);
+        print_synapse_stats<<<grid_dim, block_dim>>>(d_synapses, synapses_pitch);
         printSynapses<<<grid_dim, block_dim>>>(d_synapses, synapses_pitch);
         print_parameters<<<1, 1>>>(d_parameters);
-    }*/
+    }
     
     //get brain outputs
     int *outputs = (int*) malloc(sizeof(int) * NUM_OUTPUTS);

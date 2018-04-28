@@ -7,6 +7,8 @@ __global__ void printNeurons(int *d_neuron_outputs, float *d_weighted_sums);
 
 __global__ void print_parameters(struct Parameters *d_parameters);
 
+__global__ void print_synapse_stats(struct Synapse *d_synapses, size_t pitch);
+
 void neuron_stats(int *d_neuron_outputs);
 
 #endif
