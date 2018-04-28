@@ -53,13 +53,8 @@ __global__ void learn(struct Synapse *d_synapses, float reward, size_t pitch, in
             //neuron_array[synapse].weight += LEARNING_RATE * reward * neuron_array[synapse].activity;
             //neuron_array[synapse].weight += LEARNING_RATE * reward * neuron_array[synapse].activity * fabs(MAX_ABS_WEIGHT - fabs(neuron_array[synapse].weight));
             neuron_array[synapse].weight += LEARNING_RATE * reward * neuron_array[synapse].activity;
-            neuron_array[synapse].weight *= pow(2.0, -0.03 * pow(neuron_array[synapse].weight, 2));
-            if(fabs(neuron_array[synapse].weight) > 3){
-                printf("weight too big ###########################################");
-                printf("neuron: %d, synapse: %d, weight: %.2f, activity: %.2f, reward: %.2f\n",
-                    neuron, synapse, neuron_array[synapse].weight,
-                    neuron_array[synapse].activity, reward);
-            }
+            neuron_array[synapse].weight *= pow(2.0, -WEIGHT_VALUE_LIMIT_FACTOR * neuron_array[synapse].weight * neuron_array[synapse].weight);
+
             //randomly reconnect if weight too small
             if(fabsf(neuron_array[synapse].weight) < MIN_ABS_WEIGHT){
                 float new_weight = curand_uniform(&d_curand_state[neuron]) + MIN_START_WEIGHT;
