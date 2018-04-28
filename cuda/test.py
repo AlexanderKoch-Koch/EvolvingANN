@@ -17,49 +17,62 @@ def float_to_binary_list(float_value, precision, len_list):
         else:
             result_list.append(0)
     return result_list
+    
+def binary_list_to_float(binary_list, mean, value_per_bit):
+    size = len(binary_list)
+    value = mean - value_per_bit * 0.5 * float(size)
+    for i in binary_list:
+        value += i * value_per_bit
+    return value
+    
 
 
 def preprocess_inputs(observation):
     inputs = []
-    inputs += float_to_binary_list(observation[0], 0.05, 10)
-    inputs += float_to_binary_list(observation[1], 0.05, 4)
-    inputs += float_to_binary_list(observation[2], 0.05, 8)
-    inputs += float_to_binary_list(observation[3], 0.05, 4)
+    for i in range(24):
+        inputs += float_to_binary_list(observation[i], 0.05, 8)
+
     return inputs
 
-env = gym.make('CartPole-v0')
+env = gym.make('BipedalWalker-v2')
 
+print("observation size: " + str(env.action_space.shape[0]))
 print("brain input size: " + str(len(preprocess_inputs(env.reset()))))
 eann.init()
 
-for i in range(1000):
+for i in range(10000):
     start_iteration = timer()
     steps = 0
+    reward_sum = 0
     is_done = False
     observation = env.reset()
-    while not is_done:
+    while steps < 200 and not is_done:
         start = timer()
-        inputs = preprocess_inputs(observation)
+        #print(preprocess_inputs(observation))
+        inputs = preprocess_inputs(preprocess_inputs(observation))
         
-        output = eann.think(inputs)
+        outputs = eann.think(inputs)
         elapsed = timer()
         elapsed = elapsed - start
         #print("compute: " + str(elapsed) + "s")
-        #print(output[0])
-        if output[0] > 0:
-            action = 1
+        
+        actions = []
+        actions.append(binary_list_to_float(outputs[0:9], 0, 0.2))
+        actions.append(binary_list_to_float(outputs[10:19], 0, 0.2))
+        actions.append(binary_list_to_float(outputs[20:29], 0, 0.2))
+        actions.append(binary_list_to_float(outputs[30:39], 0, 0.2))
+        observation, reward, is_done, info = env.step(actions)
+        if reward == -100:
+            # agent  has fallen
+            reward = -2
         else:
-            action = 0
-        observation, reward, is_done, info = env.step(action)
-        if is_done:
-            reward = -0.2
-        else:
-            reward = 0.005
+            reward_sum += reward
 
         #env.render()
         start = timer()
+        #print("reward: " + str(reward))
         eann.reward(reward)
-        
+        time.sleep(0.01)
         steps += 1
         elapsed = timer()
         elapsed = elapsed - start
@@ -67,4 +80,5 @@ for i in range(1000):
     
     eann.reset_memory()
     elapsed = timer() - start_iteration
-    print("result: " + str(steps) + "   " + str(elapsed/steps) + "s per step")
+    print("distance: " + str(reward_sum) + "\tsteps: " + str(steps) + "\t" + str(elapsed/steps) + "s per step")
+    #print(reward_sum)
