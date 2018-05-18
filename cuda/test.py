@@ -32,7 +32,7 @@ env = gym.make('CartPole-v0')
 print("brain input size: " + str(len(preprocess_inputs(env.reset()))))
 eann.init()
 
-for i in range(1000):
+for i in range(10000):
     start_iteration = timer()
     steps = 0
     is_done = False

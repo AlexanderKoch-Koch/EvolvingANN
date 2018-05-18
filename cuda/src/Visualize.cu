@@ -33,11 +33,12 @@ __global__ void print_synapse_stats(struct Synapse *d_synapses, size_t pitch){
         float mean = weight_sum /NUM_SYNAPSES_PER_NEURON;
         printf("avr weight: %.2f  ", mean);
         //compute standard deviation
-        float standard_deviation = 0.0;
+        float variance = 0.0;
         for(int synapse = 0; synapse< NUM_SYNAPSES_PER_NEURON; synapse++){
-            standard_deviation += (neuron_array[synapse].weight - mean) * (neuron_array[synapse].weight - mean);
+            variance += (neuron_array[synapse].weight - mean) * (neuron_array[synapse].weight - mean);
         }
-        printf("standard_deviation: %.2f   ", standard_deviation);
+        variance /= NUM_SYNAPSES_PER_NEURON;
+        printf("variance: %.2f   ", variance);
     }
 }
 
