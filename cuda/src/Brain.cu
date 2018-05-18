@@ -13,6 +13,7 @@
 struct Parameters *d_parameters;
 int *d_brain_inputs;
 unsigned long iteration_counter = 0;
+
 // main ANN
 struct Synapse *d_synapses;
 size_t synapses_pitch;
@@ -61,41 +62,58 @@ void init(){
     
     // initialize brain
     init_synapses<<<grid_dim, block_dim>>>(d_synapses, synapses_pitch, d_neuron_outputs, d_brain_inputs, d_curand_states);
-    init_t1_synapses<<<t1_grid_dim, t1_block_dim>>>(d_t1_synapses, t1_synapses_pitch, synapses_pitch, d_t1_neuron_outputs, d_neuron_outputs, d_brain_inputs, d_t1_curand_states);
+    init_t1_synapses<<<t1_grid_dim, t1_block_dim>>>(d_t1_synapses, t1_synapses_pitch, d_t1_neuron_outputs, d_neuron_outputs, d_brain_inputs, d_t1_curand_states);
 }
 
 
 int* think(int *inputs){
-    //set brain inputs
+    //copy brain inputs to the device
     cudaMemcpy(d_brain_inputs, inputs, sizeof(int) * NUM_INPUTS, cudaMemcpyHostToDevice);
 
     //read
     update_parameters<<<1, 1>>>(d_parameters);
     read<<<grid_dim, block_dim>>>(d_synapses, synapses_pitch);
+    read_t1<<<t1_grid_dim, t1_block_dim>>>(d_t1_synapses, t1_synapses_pitch);
     cudaDeviceSynchronize();
     
     //compute
     compute<<<grid_dim, block_dim>>>(d_synapses, d_neuron_outputs, synapses_pitch, d_curand_states, d_parameters);
+    compute_t1<<<t1_grid_dim, t1_block_dim>>>(d_t1_synapses, d_t1_neuron_outputs, t1_synapses_pitch, d_t1_curand_states, d_parameters);
     cudaDeviceSynchronize();
 
     if(iteration_counter % 5000 == 0){
         //show info
+        printf("####################################################################");
         printf("iteration: %ld\n", iteration_counter);
+        print_parameters<<<1, 1>>>(d_parameters);
+        printf("Main ANN stats");
         neuron_stats(d_neuron_outputs);
         print_synapse_stats<<<grid_dim, block_dim>>>(d_synapses, synapses_pitch);
         printSynapses<<<grid_dim, block_dim>>>(d_synapses, synapses_pitch);
-        print_parameters<<<1, 1>>>(d_parameters);
+        
+        printf("T1 ANN stats");
     }
     
     //get brain outputs
     int *outputs = (int*) malloc(sizeof(int) * NUM_OUTPUTS);
+    int *t1_outputs = (int*) malloc(sizeof(int) * NUM_T1_OUTPUTS);
     cudaMemcpy(outputs, d_neuron_outputs, sizeof(int) * NUM_OUTPUTS, cudaMemcpyDeviceToHost);
+    cudaMemcpy(t1_outputs, d_t1_neuron_outputs, sizeof(int) * NUM_T1_OUTPUTS, cudaMemcpyDeviceToHost);
+
+    //determine learning signal for main ANN
+    int t1_output_sum = 0;
+    for(int i = 0; i < NUM_T1_OUTPUTS; i++){
+        t1_output_sum += t1_outputs[i];
+    }
+    float mainANN_learning_factor = (float) t1_output_sum / NUM_T1_OUTPUTS;
+    learn<<<grid_dim, block_dim>>>(d_synapses, mainANN_learning_factor, synapses_pitch, d_neuron_outputs, d_brain_inputs, d_curand_states);
+    //printf("mainANN_learning_factor: %.2f \n", mainANN_learning_factor);
     iteration_counter++;
     return outputs;
 }
 
 void process_reward(float reward){
-    learn<<<grid_dim, block_dim>>>(d_synapses, reward, synapses_pitch, d_neuron_outputs, d_brain_inputs, d_curand_states);
+    learn_t1<<<t1_grid_dim, t1_block_dim>>>(d_t1_synapses, reward, t1_synapses_pitch, d_t1_neuron_outputs, d_neuron_outputs, d_brain_inputs, d_t1_curand_states);
 }
 
 void reset_memory(){

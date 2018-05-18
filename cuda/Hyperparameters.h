@@ -1,7 +1,8 @@
 #define NUM_NEURONS 10
-#define NUM_T1_NEURONS 3
+#define NUM_T1_NEURONS 5
 #define NUM_INPUTS 26
 #define NUM_OUTPUTS 1
+#define NUM_T1_OUTPUTS 3
 #define NUM_SYNAPSES_PER_NEURON 25
 #define THRESHOLD 0.3
 #define LEARNING_RATE 0.2

@@ -9,6 +9,6 @@ __global__ void init_random_seed(unsigned int seed, curandState_t *d_curand_stat
 
 __global__ void init_synapses(struct Synapse *d_synapses, size_t pitch, int *d_neuron_outputs, int *d_brain_inputs, curandState_t *d_curand_state);
 
-__global__ void init_t1_synapses(struct Synapse *d_synapses, size_t t1_pitch, size_t pitch, int *d_t1_neuron_outputs, int *d_neuron_outputs, int *d_brain_inputs, curandState_t *d_curand_state);
+__global__ void init_t1_synapses(struct Synapse *d_t1_synapses, size_t t1_pitch, int *d_t1_neuron_outputs, int *d_neuron_outputs, int *d_brain_inputs, curandState_t *d_t1_curand_states);
 
 #endif
