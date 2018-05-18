@@ -25,7 +25,7 @@ void init(){
     //mark output start
     printf("#################################################################################################");
     printf("#################################################################################################");
-    printf("syanpses memory usage: %zu Bytes", sizeof(struct Synapse) * NUM_NEURONS * NUM_SYNAPSES_PER_NEURON);
+    printf("synapses memory usage: %zu Bytes", sizeof(struct Synapse) * NUM_NEURONS * NUM_SYNAPSES_PER_NEURON);
     printf("num_neurons: %d block size: %d grid size: %d", NUM_NEURONS, block_dim.x, grid_dim.x);
     cudaMalloc(&d_curand_state, sizeof(curandState_t) * NUM_NEURONS);
     init_random_seed<<<grid_dim, block_dim>>>(time(NULL), d_curand_state);
