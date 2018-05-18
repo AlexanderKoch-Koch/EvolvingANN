@@ -13,12 +13,19 @@ dim3 grid_dim((NUM_NEURONS + block_dim.x - 1) / block_dim.x);
 curandState_t *d_curand_state;
 
 struct Parameters *d_parameters;
+int *d_brain_inputs;
+unsigned long iteration_counter = 0;
+// main ANN
 struct Synapse *d_synapses;
 size_t synapses_pitch;
 int *d_neuron_outputs;
 float *d_weighted_sums;
-int *d_brain_inputs;
-unsigned long iteration_counter = 0;
+
+//trainer ANN
+struct Synapse *d_t1_synapses;
+size_t t1_synapses_pitch;
+int *d_t1_neuron_outputs;
+float *d_t1_weighted_sums;
 
 
 void init(){
@@ -34,8 +41,11 @@ void init(){
     cudaMalloc(&d_parameters, sizeof(struct Parameters));
     cudaMalloc(&d_brain_inputs, sizeof(int) * NUM_INPUTS);
     cudaMalloc(&d_weighted_sums, sizeof(float) * NUM_NEURONS);
+    cudaMalloc(&d_t1_weighted_sums, sizeof(float) * NUM_T1_NEURONS);
     cudaMalloc(&d_neuron_outputs, sizeof(int) * NUM_NEURONS);
+    cudaMalloc(&d_t1_neuron_outputs, sizeof(int) * NUM_T1_NEURONS);
     cudaMallocPitch(&d_synapses, &synapses_pitch, NUM_SYNAPSES_PER_NEURON * sizeof(struct Synapse), NUM_NEURONS);
+    cudaMallocPitch(&d_t1_synapses, &t1_synapses_pitch, NUM_SYNAPSES_PER_NEURON * sizeof(struct Synapse), NUM_T1_NEURONS);
     
     struct Parameters start_parameters;
     start_parameters.threshold_randomness_factor = THRESHOLD_RANDOMNESS_FACTOR_START;
