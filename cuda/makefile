@@ -10,7 +10,7 @@ OBJECTS = $(patsubst %.cu, %.o, $(addprefix $(OBJDIR)/, $(notdir $(SOURCES))))
 
 
 
-eann.so:  $(OBJECTS) $(OBJDIR)/.
+eann.so:  $(OBJDIR)/. $(OBJECTS)
 	gcc --shared  -o eann.so  $(OBJECTS) $(LDFLAGS)
 	
 $(OBJDIR)/.:
