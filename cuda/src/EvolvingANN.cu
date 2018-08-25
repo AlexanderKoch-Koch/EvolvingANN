@@ -57,6 +57,12 @@ static PyObject *eann_reward(PyObject *self, PyObject *args)
     Py_RETURN_NONE;
 }
 
+static PyObject *write_to_tensorboard(PyObject *self, PyObject *args)
+{
+    write_tensorboard();
+    Py_RETURN_NONE;
+}
+
 static PyObject *eann_release_memory(PyObject *self, PyObject *args)
 {
     release_memory();
@@ -75,6 +81,7 @@ static PyMethodDef methods[] = {
     {"reward", eann_reward, METH_VARARGS, "reward brain"},
     {"reset_memory", eann_reset_memory, METH_VARARGS, "reset memory"},
     {"release_memory", eann_release_memory, METH_VARARGS, "free all allocated memory"},
+    {"write_to_tensorboard", write_to_tensorboard, METH_VARARGS, "writing information to .event file for tensorbard"},
     {NULL, NULL, 0, NULL}
 };
 

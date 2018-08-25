@@ -7,6 +7,7 @@
 #include "Compute.h"
 #include "Hyperparameters.h"
 #include "Parameters.h"
+#include "TensorboardInterface.h"
 
 dim3 block_dim(512, 1, 1);
 dim3 grid_dim((NUM_NEURONS + block_dim.x - 1) / block_dim.x);
@@ -87,4 +88,10 @@ void release_memory(){
     cudaFree(d_neuron_outputs);
     cudaFree(d_synapses);
     cudaFree(d_weighted_sums);
+}
+
+void write_tensorboard()
+{
+    printf("writing to tensorbiard");
+    write_scalar(10);
 }

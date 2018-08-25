@@ -11,4 +11,6 @@ void reset_memory();
 
 void release_memory();
 
+void write_tensorboard();
+
 #endif
