@@ -4,8 +4,8 @@ extern "C"
 {
 #endif
 
-
-    void write_scalar(int scalar);
+    void init_events_writer(const char *log_dir);
+    void write_scalar(unsigned long step, float scalar, const char *tag);
 
 
 #ifdef __cplusplus

@@ -22,7 +22,10 @@ int *d_brain_inputs;
 unsigned long iteration_counter = 0;
 
 
-void init(){
+void init(const char *log_dir){
+    //initialize tensorboard event writer
+    init_events_writer(log_dir);
+    
     //mark output start
     printf("#################################################################################################");
     printf("#################################################################################################");
@@ -77,6 +80,7 @@ int* think(int *inputs){
 
 void process_reward(float reward){
     learn<<<grid_dim, block_dim>>>(d_synapses, reward, synapses_pitch, d_neuron_outputs, d_brain_inputs, d_curand_state);
+    write_scalar(iteration_counter, reward, "reward");
 }
 
 void reset_memory(){
@@ -93,5 +97,6 @@ void release_memory(){
 void write_tensorboard()
 {
     printf("writing to tensorbiard");
-    write_scalar(10);
+    write_scalar(0, 10, "test");
+
 }

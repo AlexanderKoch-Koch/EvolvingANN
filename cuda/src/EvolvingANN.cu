@@ -5,8 +5,16 @@
 
 static PyObject *eann_init(PyObject *self, PyObject *args)
 {
-  init();
-  Py_RETURN_NONE;
+    const char *log_dir;
+
+    if (!PyArg_ParseTuple(args, "s", &log_dir))
+    {
+      printf("This function takes 1 string for log_dir");
+      return NULL;
+    }
+    printf("log dir is: %s", log_dir);
+    init(log_dir);
+    Py_RETURN_NONE;
 }
 
 static PyObject *eann_think(PyObject *self, PyObject *args)
