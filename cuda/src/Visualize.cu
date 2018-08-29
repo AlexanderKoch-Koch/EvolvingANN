@@ -4,7 +4,7 @@
 #include "Synapse.h"
 #include "Hyperparameters.h"
 #include "Parameters.h"
-
+#include "TensorboardInterface.h"
 
 
 __global__ void printSynapses(struct Synapse *d_synapses, size_t pitch){
@@ -47,15 +47,14 @@ __global__ void printNeurons(int *d_neuron_outputs, float *d_weighted_sums){
 }
 
 
-void neuron_stats(int *d_neuron_outputs){
+void neuron_stats(int *d_neuron_outputs, unsigned long step){
     int *neuron_outputs = (int*) malloc(sizeof(int) * NUM_NEURONS);
     cudaMemcpy(neuron_outputs, d_neuron_outputs, sizeof(int) * NUM_NEURONS, cudaMemcpyDeviceToHost);
     int output_sum = 0;
     for(int i = 0; i <NUM_NEURONS; i++){
         output_sum += neuron_outputs[i];
     }
-    
-    printf("avr_output: %.2f  ", output_sum/(float)NUM_NEURONS);
+    write_scalar(step, output_sum/(float)NUM_NEURONS, "avr_output");
 }
 
 __global__ void print_parameters(struct Parameters *d_parameters){
