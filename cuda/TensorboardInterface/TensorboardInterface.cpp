@@ -12,23 +12,16 @@ tensorflow::EventsWriter *writer;
 
 void init_events_writer(const char *log_dir_arg)
 {
+    // delete old log directory if exists
     std::string log_dir_string = std::string(log_dir_arg);
-    struct stat st = {0};
+    std::string command = "rm -r " + log_dir_string;
+    system(command.c_str());
     
-    char int_str[32];
-    char log_dir[64] = "";
-    int i = -1;
-    do {
-        i++;
-        sprintf(int_str, "%d", i);
-        log_dir[0] = '\0';
-        strcat(log_dir, log_dir_arg);
-        if(i != 0) strcat(log_dir, int_str);
-    }while(stat(log_dir, &st) != -1);
-    std::cout << "\ncreating log dir: " << log_dir;
-    mkdir(log_dir, 0700);
-    strcat(log_dir, "/events");
-    writer = new tensorflow::EventsWriter(log_dir);
+    //create new empty log diretcory
+    mkdir(log_dir_arg, 0700);
+    
+    //initialize tensorboard writer object
+    writer = new tensorflow::EventsWriter(log_dir_string + "/events");
 }
 
 
@@ -68,49 +61,3 @@ void write_histogram(unsigned long step_arg,  const char *tag) {
     
     }
 }
-
-
-
-/*int TensorBoardLogger::add_histogram(const string &tag, int step, vector<float> &values) {
-    if (bucket_limits_ == NULL) {
-        generate_default_buckets();
-    }
-
-    vector<int> counts(bucket_limits_->size(), 0);
-    double min = numeric_limits<double>::max();
-    double max = numeric_limits<double>::lowest();
-    double sum = 0.0;
-    double sum_squares = 0.0;
-    for (auto v: values) {
-        auto lb = lower_bound(bucket_limits_->begin(), bucket_limits_->end(), v);
-        counts[lb - bucket_limits_->begin()]++;
-        sum += v;
-        sum_squares += v * v;
-        if (v > max) {
-            max = v;
-        } else if (v < min) {
-            min = v;
-        }
-    }
-
-    auto histo = new HistogramProto();
-    histo->set_min(min);
-    histo->set_max(max);
-    histo->set_num(values.size());
-    histo->set_sum(sum);
-    histo->set_sum_squares(sum_squares);
-    for (size_t i = 0; i < counts.size(); ++i) {
-        if (counts[i] > 0) {
-            histo->add_bucket_limit((*bucket_limits_)[i]);
-            histo->add_bucket(counts[i]);
-        }
-    }
-
-    auto summary = new Summary();
-    auto v = summary->add_value();
-    v->set_node_name(tag);
-    v->set_tag(tag);
-    v->set_allocated_histo(histo);
-
-    return add_event(step, summary);
-}*/
