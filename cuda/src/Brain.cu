@@ -62,10 +62,18 @@ int* think(int *inputs){
     compute<<<grid_dim, block_dim>>>(d_synapses, d_neuron_outputs, synapses_pitch, d_curand_state, d_parameters);
     cudaDeviceSynchronize();
 
-    if(iteration_counter % 5000 == 0){
+    if(iteration_counter % 1 == 0){
         //show info
         printf("iteration: %ld\n", iteration_counter);
-        neuron_stats(d_neuron_outputs);
+        //float avr_neuron_output;
+        //float* d_avr_neuron_output;
+        //cudaMalloc(&d_avr_neuron_output, sizeof(float));
+        neuron_stats(d_neuron_outputs, iteration_counter);
+        
+        //cudaMemcpy(&avr_neuron_output, d_avr_neuron_output, sizeof(float), cudaMemcpyDeviceToHost);
+        //cudaFree(d_avr_neuron_output);
+        //printf("Received avr?neuron output form device: %.2f", avr_neuron_output);
+        
         print_synapse_stats<<<grid_dim, block_dim>>>(d_synapses, synapses_pitch);
         printSynapses<<<grid_dim, block_dim>>>(d_synapses, synapses_pitch);
         print_parameters<<<1, 1>>>(d_parameters);
@@ -96,7 +104,6 @@ void release_memory(){
 
 void write_tensorboard()
 {
-    printf("writing to tensorbiard");
-    write_scalar(0, 10, "test");
-
+    printf("\nwriting to tensorboard");
+    write_histogram(0, "test_by_alex");
 }
