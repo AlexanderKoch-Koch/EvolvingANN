@@ -11,7 +11,7 @@ OBJECTS = $(patsubst %.cu, %.o, $(addprefix $(OBJDIR)/, $(notdir $(SOURCES))))
 
 
 eann.so:  $(OBJDIR)/. $(OBJECTS)
-	g++-6 --shared -o eann.so  $(OBJECTS) $(OBJDIR)/TensorboardInterface.o $(LDFLAGS) 
+	g++-6 --shared -o ~/.local/lib/python3.6/site-packages/eann.so  $(OBJECTS) $(OBJDIR)/TensorboardInterface.o $(LDFLAGS) 
 	
 $(OBJDIR)/.:
 	mkdir -p $@
