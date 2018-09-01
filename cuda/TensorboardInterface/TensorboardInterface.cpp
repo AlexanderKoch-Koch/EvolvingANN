@@ -7,35 +7,63 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <unistd.h>
+#include <dirent.h>
 
 tensorflow::EventsWriter *writer;
 
-int mkpath(char* file_path, mode_t mode) {
-    // create path file_path with mode mode
-  assert(file_path && *file_path);
-  char* p;
-  for (p=strchr(file_path+1, '/'); p; p=strchr(p+1, '/')) {
-    *p='\0';
-    if (mkdir(file_path, mode)==-1) {
-      if (errno!=EEXIST) { *p='/'; return -1; }
-    }
-    *p='/';
-  }
-  return 0;
-}
-
 void init_events_writer(const char *log_dir_arg)
 {
-    // delete old log directory if exists
-    std::string log_dir_string = std::string(log_dir_arg);
-    std::string command = "rm -r " + log_dir_string;
-    system(command.c_str());
+    //find dir name which does not yet exist
+    struct stat st = {0};
     
-    //create new empty log diretcory
-    mkpath((char*) (log_dir_string + "/").c_str(), 0700);
+    char int_str[32];
+    char log_dir[64] = "";
+    int i = -1;
+    do {
+        i++;
+        sprintf(int_str, "%d", i);
+        log_dir[0] = '\0';
+        strcat(log_dir, log_dir_arg);
+        if(i != 0) strcat(log_dir, int_str);
+    }while(stat(log_dir, &st) != -1);
+    
+    
+    //delete old log dir if it exists
+    DIR* dp;
+    struct dirent* ep;
+    char int_char[10];
+    for(int i = -1; i< 10; i++){
+      // iterate over some possible folder names
+      sprintf(int_char, "%d", i);
+      char path[128] = "";
+      strcat(path, log_dir_arg);
+      if(i != -1) strcat(path, int_char);
+      std::string path_string = std::string(log_dir_arg);
+      dp = opendir(path);
+      
+      if (dp != NULL)
+      {
+        // iterate over all files in the folder
+        while(ep = readdir(dp))
+        {
+          // delete all files in diretcory
+          char full_path[256] = "";
+          strcat(full_path, path);
+          strcat(full_path, "/");
+          strcat(full_path, ep->d_name);
+          remove(full_path);
+        }
+      }
+      // remove directory if it exists
+      rmdir(path);
+    }
+    
+    //create log dir
+    mkdir(log_dir, 0700);
     
     //initialize tensorboard writer object
-    writer = new tensorflow::EventsWriter(log_dir_string + "/events");
+    writer = new tensorflow::EventsWriter(strcat(log_dir, "/events"));
 }
 
 
