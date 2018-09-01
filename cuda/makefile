@@ -8,10 +8,12 @@ NVCCFLAGS = -I/usr/include/python3.6 -Iheaders/ -I./
 SOURCES = $(wildcard $(SRCDIR)/*.cu)
 OBJECTS = $(patsubst %.cu, %.o, $(addprefix $(OBJDIR)/, $(notdir $(SOURCES))))
 
+LIBPATH = ~/.local/lib/python3.6/site-packages/eann.so
 
 
-eann.so:  $(OBJDIR)/. $(OBJECTS)
-	g++-6 --shared -o ~/.local/lib/python3.6/site-packages/eann.so  $(OBJECTS) $(OBJDIR)/TensorboardInterface.o $(LDFLAGS) 
+
+$(LIBPATH):  $(OBJDIR)/. $(OBJECTS)
+	g++-6 --shared -o $(LIBPATH)  $(OBJECTS) $(OBJDIR)/TensorboardInterface.o $(LDFLAGS) 
 	
 $(OBJDIR)/.:
 	mkdir -p $@
@@ -26,4 +28,4 @@ $(OBJDIR)/EvolvingANN.o: $(SRCDIR)/EvolvingANN.cu Hyperparameters.h
 	nvcc --compiler-options '-fPIC' -c $< $(NVCCFLAGS) -o $@	
 	
 clean:
-	rm -f $(OBJDIR)/*.o eann.so
+	rm -f $(OBJDIR)/*.o $(LIBPATH)
