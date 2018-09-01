@@ -10,6 +10,20 @@
 
 tensorflow::EventsWriter *writer;
 
+int mkpath(char* file_path, mode_t mode) {
+    // create path file_path with mode mode
+  assert(file_path && *file_path);
+  char* p;
+  for (p=strchr(file_path+1, '/'); p; p=strchr(p+1, '/')) {
+    *p='\0';
+    if (mkdir(file_path, mode)==-1) {
+      if (errno!=EEXIST) { *p='/'; return -1; }
+    }
+    *p='/';
+  }
+  return 0;
+}
+
 void init_events_writer(const char *log_dir_arg)
 {
     // delete old log directory if exists
@@ -18,7 +32,7 @@ void init_events_writer(const char *log_dir_arg)
     system(command.c_str());
     
     //create new empty log diretcory
-    mkdir(log_dir_arg, 0700);
+    mkpath((char*) (log_dir_string + "/").c_str(), 0700);
     
     //initialize tensorboard writer object
     writer = new tensorflow::EventsWriter(log_dir_string + "/events");
