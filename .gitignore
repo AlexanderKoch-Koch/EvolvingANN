@@ -16,3 +16,5 @@ objects/
 cuda/objects/Visualize.o
 *.o
 *.so
+
+tensorboard_logs/
