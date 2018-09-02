@@ -51,7 +51,7 @@ int init(const char *log_dir){
     // initialize brain
     init_synapses<<<grid_dim, block_dim>>>(d_synapses, synapses_pitch, d_neuron_outputs, d_brain_inputs, d_curand_state);
     
-    return -1;
+    return 0;
 }
 
 
