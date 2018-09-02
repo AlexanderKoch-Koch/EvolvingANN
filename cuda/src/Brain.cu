@@ -22,14 +22,20 @@ int *d_brain_inputs;
 unsigned long iteration_counter = 0;
 
 
-void init(const char *log_dir){
+int init(const char *log_dir){
     //initialize tensorboard event writer
     init_events_writer(log_dir);
     //mark output start
-    printf("#################################################################################################");
-    printf("#################################################################################################");
-    printf("synapses memory usage: %zu Bytes", sizeof(struct Synapse) * NUM_NEURONS * NUM_SYNAPSES_PER_NEURON);
-    printf("num_neurons: %d block size: %d grid size: %d", NUM_NEURONS, block_dim.x, grid_dim.x);
+    printf("\n#################################################################################################");
+    printf("\n#################################################################################################");
+    printf("\nsynapses memory usage: %zu Bytes", sizeof(struct Synapse) * NUM_NEURONS * NUM_SYNAPSES_PER_NEURON);
+    printf("\nnum_neurons: %d block size: %d grid size: %d", NUM_NEURONS, block_dim.x, grid_dim.x);
+    printf("\nnum inputs: %d  num outputs: %d", NUM_INPUTS, NUM_OUTPUTS);
+    if(NUM_OUTPUTS > NUM_NEURONS){
+        printf("Error: NUM_OUTPUTS is greater than NUM_NEURONS. This is not possible");
+        return -1;
+    }
+    
     cudaMalloc(&d_curand_state, sizeof(curandState_t) * NUM_NEURONS);
     init_random_seed<<<grid_dim, block_dim>>>(time(NULL), d_curand_state);
     //allocate memory on the device
@@ -44,6 +50,8 @@ void init(const char *log_dir){
     cudaMemcpy(d_parameters, &start_parameters, sizeof(struct Parameters), cudaMemcpyHostToDevice);
     // initialize brain
     init_synapses<<<grid_dim, block_dim>>>(d_synapses, synapses_pitch, d_neuron_outputs, d_brain_inputs, d_curand_state);
+    
+    return -1;
 }
 
 

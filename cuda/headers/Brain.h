@@ -1,7 +1,7 @@
 #ifndef BRAIN_H
 #define BRAIN_H
 
-void init(const char *log_dir);
+int init(const char *log_dir);
 
 int* think(int *inputs);
 

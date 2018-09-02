@@ -13,8 +13,8 @@ static PyObject *eann_init(PyObject *self, PyObject *args)
       return NULL;
     }
     printf("log dir is: %s", log_dir);
-    init(log_dir);
-    Py_RETURN_NONE;
+    int success = init(log_dir);
+    return PyLong_FromLong((long) success);
 }
 
 static PyObject *eann_think(PyObject *self, PyObject *args)
