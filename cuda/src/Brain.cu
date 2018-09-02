@@ -25,7 +25,6 @@ unsigned long iteration_counter = 0;
 void init(const char *log_dir){
     //initialize tensorboard event writer
     init_events_writer(log_dir);
-    
     //mark output start
     printf("#################################################################################################");
     printf("#################################################################################################");
@@ -33,14 +32,13 @@ void init(const char *log_dir){
     printf("num_neurons: %d block size: %d grid size: %d", NUM_NEURONS, block_dim.x, grid_dim.x);
     cudaMalloc(&d_curand_state, sizeof(curandState_t) * NUM_NEURONS);
     init_random_seed<<<grid_dim, block_dim>>>(time(NULL), d_curand_state);
-    
     //allocate memory on the device
     cudaMalloc(&d_parameters, sizeof(struct Parameters));
     cudaMalloc(&d_brain_inputs, sizeof(int) * NUM_INPUTS);
     cudaMalloc(&d_weighted_sums, sizeof(float) * NUM_NEURONS);
     cudaMalloc(&d_neuron_outputs, sizeof(int) * NUM_NEURONS);
     cudaMallocPitch(&d_synapses, &synapses_pitch, NUM_SYNAPSES_PER_NEURON * sizeof(struct Synapse), NUM_NEURONS);
-    
+
     struct Parameters start_parameters;
     start_parameters.threshold_randomness_factor = THRESHOLD_RANDOMNESS_FACTOR_START;
     cudaMemcpy(d_parameters, &start_parameters, sizeof(struct Parameters), cudaMemcpyHostToDevice);
@@ -60,11 +58,12 @@ int* think(int *inputs){
     
     //compute
     compute<<<grid_dim, block_dim>>>(d_synapses, d_neuron_outputs, synapses_pitch, d_curand_state, d_parameters);
+
     cudaDeviceSynchronize();
 
-    if(iteration_counter % 1 == 0){
+    if(iteration_counter % 10 == 0){
         //show info
-        printf("iteration: %ld\n", iteration_counter);
+        //printf("iteration: %ld\n", iteration_counter);
         //float avr_neuron_output;
         //float* d_avr_neuron_output;
         //cudaMalloc(&d_avr_neuron_output, sizeof(float));
@@ -74,9 +73,9 @@ int* think(int *inputs){
         //cudaFree(d_avr_neuron_output);
         //printf("Received avr?neuron output form device: %.2f", avr_neuron_output);
         
-        print_synapse_stats<<<grid_dim, block_dim>>>(d_synapses, synapses_pitch);
-        printSynapses<<<grid_dim, block_dim>>>(d_synapses, synapses_pitch);
-        print_parameters<<<1, 1>>>(d_parameters);
+        //print_synapse_stats<<<grid_dim, block_dim>>>(d_synapses, synapses_pitch);
+        //printSynapses<<<grid_dim, block_dim>>>(d_synapses, synapses_pitch);
+        //print_parameters<<<1, 1>>>(d_parameters);
     }
     
     //get brain outputs
