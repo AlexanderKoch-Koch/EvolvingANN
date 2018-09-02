@@ -57,6 +57,24 @@ void neuron_stats(int *d_neuron_outputs, unsigned long step){
     write_scalar(step, output_sum/(float)NUM_NEURONS, "avr_output");
 }
 
+
+void synapse_stats(struct Synapse *d_synapses, size_t pitch, unsigned long step){
+    //struct Synapse *synapses = (struct Synapse*) malloc(sizeof(struct Synapse) * NUM_SYNAPSES_PER_NEURON * 10);
+    struct Synapse synapses[10][NUM_SYNAPSES_PER_NEURON] = {0}; 
+
+    size_t h_pitch = sizeof(struct Synapse) * NUM_SYNAPSES_PER_NEURON;
+    cudaMemcpy2D(synapses, h_pitch, d_synapses, pitch, sizeof(struct Synapse) * NUM_SYNAPSES_PER_NEURON, 10, cudaMemcpyDeviceToHost);
+    
+    double weight_sum = 0;
+    for(int neuron = 0; neuron < 10; neuron++){
+        for(int synapse = 0; synapse < NUM_SYNAPSES_PER_NEURON; synapse++){
+            weight_sum += synapses[neuron][synapse].weight;
+        }
+    }
+    
+    write_scalar(step, weight_sum/(float)(NUM_SYNAPSES_PER_NEURON * 10), "avr_weight");
+}
+
 __global__ void print_parameters(struct Parameters *d_parameters){
     printf(" threshold_randomness_factor %.3f ", d_parameters->threshold_randomness_factor);   
 }

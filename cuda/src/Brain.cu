@@ -76,7 +76,7 @@ int* think(int *inputs){
         //float* d_avr_neuron_output;
         //cudaMalloc(&d_avr_neuron_output, sizeof(float));
         neuron_stats(d_neuron_outputs, iteration_counter);
-        
+        synapse_stats(d_synapses, synapses_pitch, iteration_counter);
         //cudaMemcpy(&avr_neuron_output, d_avr_neuron_output, sizeof(float), cudaMemcpyDeviceToHost);
         //cudaFree(d_avr_neuron_output);
         //printf("Received avr?neuron output form device: %.2f", avr_neuron_output);

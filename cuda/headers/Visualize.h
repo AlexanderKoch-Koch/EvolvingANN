@@ -11,4 +11,6 @@ __global__ void print_synapse_stats(struct Synapse *d_synapses, size_t pitch);
 
 void neuron_stats(int *d_neuron_outputs, unsigned long step);
 
+void synapse_stats(struct Synapse *d_synapses, size_t pitch, unsigned long step);
+
 #endif
