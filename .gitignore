@@ -18,3 +18,4 @@ cuda/objects/Visualize.o
 *.so
 
 tensorboard_logs/
+MUJOCO_LOG.TXT
