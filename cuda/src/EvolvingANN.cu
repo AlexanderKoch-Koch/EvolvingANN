@@ -34,6 +34,10 @@ static PyObject *eann_think(PyObject *self, PyObject *args)
   }
 
   int len = Py_SAFE_DOWNCAST(PyObject_Size(obj), Py_ssize_t, int);
+  if(len != NUM_INPUTS){
+    //error
+    printf("ERROR number of provided inputs (%d) does not equal number of input neurons (%d)", len, NUM_INPUTS);
+  }
   brain_input = (int*) malloc(sizeof(int) * len);
   for(int element = 0; element < len; element++){
     PyObject *next = PyIter_Next(iter);
