@@ -59,20 +59,22 @@ void neuron_stats(int *d_neuron_outputs, unsigned long step){
 
 
 void synapse_stats(struct Synapse *d_synapses, size_t pitch, unsigned long step){
-    //struct Synapse *synapses = (struct Synapse*) malloc(sizeof(struct Synapse) * NUM_SYNAPSES_PER_NEURON * 10);
-    struct Synapse synapses[10][NUM_SYNAPSES_PER_NEURON] = {0}; 
+    const int num_neurons_to_analyse = 10;
+    struct Synapse synapses[num_neurons_to_analyse][NUM_SYNAPSES_PER_NEURON] = {0}; 
 
     size_t h_pitch = sizeof(struct Synapse) * NUM_SYNAPSES_PER_NEURON;
-    cudaMemcpy2D(synapses, h_pitch, d_synapses, pitch, sizeof(struct Synapse) * NUM_SYNAPSES_PER_NEURON, 10, cudaMemcpyDeviceToHost);
+    cudaMemcpy2D(synapses, h_pitch, d_synapses, pitch, sizeof(struct Synapse) * NUM_SYNAPSES_PER_NEURON, num_neurons_to_analyse, cudaMemcpyDeviceToHost);
     
     double weight_sum = 0;
-    for(int neuron = 0; neuron < 10; neuron++){
+    double activity_sum = 0;
+    for(int neuron = 0; neuron < num_neurons_to_analyse; neuron++){
         for(int synapse = 0; synapse < NUM_SYNAPSES_PER_NEURON; synapse++){
             weight_sum += synapses[neuron][synapse].weight;
+            activity_sum += synapses[neuron][synapse].activity;
         }
     }
-    
-    write_scalar(step, weight_sum/(float)(NUM_SYNAPSES_PER_NEURON * 10), "avr_weight");
+    write_scalar(step, weight_sum/(float)(NUM_SYNAPSES_PER_NEURON * num_neurons_to_analyse), "avr_weight");
+    write_scalar(step, activity_sum/ float(NUM_SYNAPSES_PER_NEURON * num_neurons_to_analyse), "avr_activity");
 }
 
 __global__ void print_parameters(struct Parameters *d_parameters){
