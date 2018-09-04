@@ -70,11 +70,11 @@ void synapse_stats(struct Synapse *d_synapses, size_t pitch, unsigned long step)
     for(int neuron = 0; neuron < num_neurons_to_analyse; neuron++){
         for(int synapse = 0; synapse < NUM_SYNAPSES_PER_NEURON; synapse++){
             weight_sum += synapses[neuron][synapse].weight;
-            activity_sum += synapses[neuron][synapse].activity;
+            activity_sum += fabsf(synapses[neuron][synapse].activity);
         }
     }
     write_scalar(step, weight_sum/(float)(NUM_SYNAPSES_PER_NEURON * num_neurons_to_analyse), "avr_weight");
-    write_scalar(step, activity_sum/ float(NUM_SYNAPSES_PER_NEURON * num_neurons_to_analyse), "avr_activity");
+    write_scalar(step, activity_sum/ float(NUM_SYNAPSES_PER_NEURON * num_neurons_to_analyse), "avr__abs_activity");
 }
 
 __global__ void print_parameters(struct Parameters *d_parameters){
