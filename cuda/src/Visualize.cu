@@ -66,14 +66,17 @@ void synapse_stats(struct Synapse *d_synapses, size_t pitch, unsigned long step)
     cudaMemcpy2D(synapses, h_pitch, d_synapses, pitch, sizeof(struct Synapse) * NUM_SYNAPSES_PER_NEURON, num_neurons_to_analyse, cudaMemcpyDeviceToHost);
     
     double weight_sum = 0;
+    double abs_weight_sum = 0;
     double activity_sum = 0;
     for(int neuron = 0; neuron < num_neurons_to_analyse; neuron++){
         for(int synapse = 0; synapse < NUM_SYNAPSES_PER_NEURON; synapse++){
             weight_sum += synapses[neuron][synapse].weight;
+            abs_weight_sum += fabsf(synapses[neuron][synapse].weight);
             activity_sum += fabsf(synapses[neuron][synapse].activity);
         }
     }
     write_scalar(step, weight_sum/(float)(NUM_SYNAPSES_PER_NEURON * num_neurons_to_analyse), "avr_weight");
+    write_scalar(step, abs_weight_sum/(float)(NUM_SYNAPSES_PER_NEURON * num_neurons_to_analyse), "avr_abs_weight");
     write_scalar(step, activity_sum/ float(NUM_SYNAPSES_PER_NEURON * num_neurons_to_analyse), "avr_abs_activity");
 }
 
