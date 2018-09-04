@@ -74,7 +74,7 @@ void synapse_stats(struct Synapse *d_synapses, size_t pitch, unsigned long step)
         }
     }
     write_scalar(step, weight_sum/(float)(NUM_SYNAPSES_PER_NEURON * num_neurons_to_analyse), "avr_weight");
-    write_scalar(step, activity_sum/ float(NUM_SYNAPSES_PER_NEURON * num_neurons_to_analyse), "avr__abs_activity");
+    write_scalar(step, activity_sum/ float(NUM_SYNAPSES_PER_NEURON * num_neurons_to_analyse), "avr_abs_activity");
 }
 
 __global__ void print_parameters(struct Parameters *d_parameters){
