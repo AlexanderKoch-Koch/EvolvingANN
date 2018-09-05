@@ -13,9 +13,8 @@ In order to maximize reward, Brain.c contains a function called process_reward()
 # Hyperparameter optimization through an evolutionary algorithm
 Evolution.py tries to find the optimal hyperparameters through random mutation. After each generation, the best agents are selected for the mating pool. The child agents will then receive random parameters from this pool. A specific percentage of these child parameters will additionally be mutated.
 
-# Python test code
-Cuda/test.py currently provides an interface to the CartPole environment for the Python extension.
-Python/Simulation.py currently provides an interface to the CartPole environment for the C extension.
+# Gym
+This folder contains Python scripts to test the CUDA extension in the OpenAI gym. Currently there are scripts for the cartPole and for the half cheetah environment. The algorithm is able to solve the CartPole environment. However, it shows no sign of learning in the half cheetah simulation. This is probably caused by larger observation and action space.
 
 # Example
 ![alt text](https://github.com/AlexanderKoch-Koch/EvolvingANN/blob/master/Example_Connectome.png "example connectome")
