@@ -1,6 +1,6 @@
 # Spiking Artificial Neural Network
 
-An attempt to build a spiking artificial neural network with a reward-driven Hebbian learning function. Since it doesn't rely on backpropagation it can be wired completely randomly. Synapses with low weights will be destroyed and replaced by a random connection. This should enable the ANN to evolve and optimize its own architecture. It can, for example, form a highly recurrent network which is similar to the  biological cerebrum.
+An attempt to build a simple spiking artificial neural network with a reward-driven Hebbian learning function. Since it doesn't rely on backpropagation it can be wired completely randomly. Synapses with low weights will be destroyed and replaced by a random connection. This should enable the ANN to evolve and optimize its own architecture. It can, for example, form a highly recurrent network which is similar to the  biological cerebrum.
 
 Scores in CartPole envionment with _max_episode_steps = 200
 ![alt text](https://github.com/AlexanderKoch-Koch/EvolvingANN/blob/LTD/ANN_Performance.PNG "Learning performance in CartPole environment")
